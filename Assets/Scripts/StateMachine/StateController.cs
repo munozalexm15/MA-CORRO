@@ -13,6 +13,7 @@ public class StateController : MonoBehaviour
     public RunningState runningState = new RunningState();
     public SlidingState slidingState = new SlidingState();
     public JumpingState jumpingState = new JumpingState();
+    public DefeatedState defeatedState = new DefeatedState();
 
 /// <summary>
 /// Swipe Variables
@@ -32,7 +33,13 @@ public class StateController : MonoBehaviour
     public GameObject currentLane;
     public Transform PlayerParentTransform;
 
+//Camera control variables
     public CameraController cameraController;
+    public CameraShakeEffect cameraShakeEffect;
+
+//Object Pool manager variables
+
+    public ObjectPool objPoolManager;
     
 
     private void Start()
@@ -111,6 +118,13 @@ public class StateController : MonoBehaviour
         }
         else {
             cameraController.ChangeLane(1);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Obstacle") && currentState != defeatedState) {
+            ChangeState(defeatedState);
         }
     }
 }
