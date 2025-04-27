@@ -1,23 +1,45 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowPlayerFixedRotation : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
-    public Transform player;      // El personaje a seguir
-    public Vector3 offset = new Vector3(0, 5, -10); // Offset respecto al jugador
-    public float smoothSpeed = 10f; // Velocidad de movimiento suave
+    public Vector3 basePosition = new Vector3(0, 5, -10); // Posición inicial de la cámara
+    public float laneChangeSpeed = 10f; // Velocidad del movimiento lateral
+
+    [Header("Lane Offset Settings")]
+    public float leftOffset = -1f;    // Offset cuando el jugador está en el carril izquierdo
+    public float centerOffset = 0f;   // Offset cuando está en el centro
+    public float rightOffset = 1f;    // Offset cuando está en el carril derecho
+
+    private float targetXOffset = 0f;
+    private Vector3 initialRotation;
+
+    void Start()
+    {
+        transform.position = basePosition;
+        initialRotation = transform.eulerAngles; // Guardar rotación inicial
+    }
 
     void LateUpdate()
     {
-        if (player != null)
-        {
-            // Calculamos la nueva posición de la cámara
-            Vector3 desiredPosition = player.position + offset;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
-            transform.position = smoothedPosition;
+        // Queremos que solo cambie en X
+        Vector3 desiredPosition = basePosition + new Vector3(targetXOffset, 0, 0);
 
-            // NO rotamos la cámara, mantenemos su rotación original
-        }
+        // Suavemente mover la cámara hacia el objetivo
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, laneChangeSpeed * Time.deltaTime);
+
+        // Mantener siempre la misma rotación
+        transform.eulerAngles = initialRotation;
+    }
+
+    // Función para cambiar de carril
+    public void ChangeLane(int laneIndex)
+    {
+        // laneIndex: -1 = izquierda, 0 = centro, 1 = derecha
+        if (laneIndex == -1)
+            targetXOffset = leftOffset;
+        else if (laneIndex == 0)
+            targetXOffset = centerOffset;
+        else if (laneIndex == 1)
+            targetXOffset = rightOffset;
     }
 }

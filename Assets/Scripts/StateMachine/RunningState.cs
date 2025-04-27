@@ -65,6 +65,7 @@ public class RunningState : State
                         if (sc.lanes[i].name == sc.currentLane.name) {
                             sc.currentLane = sc.lanes[i - 1];
                             sc.IsChangingLane = true;
+                            sc.MoveCameraToLane();
                             return;
                         }
                     }
@@ -79,6 +80,7 @@ public class RunningState : State
                         if (sc.lanes[i].name == sc.currentLane.name) {
                             sc.currentLane = sc.lanes[i + 1];
                             sc.IsChangingLane = true;
+                            sc.MoveCameraToLane();
                             return;
                         }
                     }

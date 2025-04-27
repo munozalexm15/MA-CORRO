@@ -31,6 +31,8 @@ public class StateController : MonoBehaviour
     public List<GameObject> lanes;
     public GameObject currentLane;
     public Transform PlayerParentTransform;
+
+    public CameraController cameraController;
     
 
     private void Start()
@@ -96,7 +98,19 @@ public class StateController : MonoBehaviour
         {
             // Moverse hacia el objetivo sin cambiar la altura (Y)
             Vector3 direction = (targetPosition - transform.position).normalized;
-            transform.position += direction * 5 * Time.deltaTime;
+            transform.position += direction * 10 * Time.deltaTime;
+        }
+    }
+
+    public void MoveCameraToLane() {
+        if (currentLane.name == "CentralLane") {
+            cameraController.ChangeLane(0);
+        }
+        else if (currentLane.name == "LeftLane") {
+            cameraController.ChangeLane(-1);
+        }
+        else {
+            cameraController.ChangeLane(1);
         }
     }
 }

@@ -1,0 +1,33 @@
+using UnityEngine;
+
+public class TileTrigger : MonoBehaviour
+{
+    public ObjectPool objectPool;
+
+    private void Start()
+    {
+
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Cuando el jugador pasa por el trigger, devolvemos el objeto al pool
+        if (other.CompareTag("Player"))
+        { 
+            objectPool.ReturnObject(gameObject);
+            gameObject.SetActive(false); // Desactivar el objeto
+            
+            // Obtener un objeto del pool
+            GameObject obj = objectPool.GetObject();
+            
+            if (obj != null)
+            {
+                // Posicionar el objeto en el trigger
+                obj.transform.position = objectPool.transform.position;
+
+                // Activar el movimiento hacia el jugador
+                obj.GetComponent<MoveTowardsPlayer>().enabled = true;
+            }
+        }
+    }
+}
