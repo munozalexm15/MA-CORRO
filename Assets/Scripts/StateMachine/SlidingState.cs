@@ -12,6 +12,7 @@ public class SlidingState : State
     protected override void OnExit()
     {
         sc.animHandler.CrossFade("Blend Tree", 0.2f,0);
+        Physics.gravity = new Vector3(0, -15.0F, 0);
         //throw new System.NotImplementedException();
     }
 
@@ -32,8 +33,8 @@ public class SlidingState : State
             
             // Si el desplazamiento en el eje Y es mayor que en el eje X, es un swipe vertical
             if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x)) {
-                // Detectar si es un swipe vertical (arriba o abajo)
-                if (swipeVector.y > sc._swipeThreshold) {
+                // Detectar si es un swipe hacia arriba y el personaje no está saltando 
+                if (swipeVector.y > sc._swipeThreshold && sc.GetComponent<Rigidbody>().velocity.y == 0) {
                     sc.ChangeState(sc.jumpingState);
                 }
             }

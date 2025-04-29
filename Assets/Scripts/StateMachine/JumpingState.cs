@@ -7,12 +7,13 @@ public class JumpingState : State
     protected override void OnEnter()
     {
         sc.animHandler.CrossFade("Jump", 0.4f,0);
-        sc.GetComponent<Rigidbody>().velocity = Vector3.up * 4;
+        sc.GetComponent<Rigidbody>().velocity = Vector3.up * 8;
     }
 
     protected override void OnExit()
     {
         sc.animHandler.CrossFade("Blend Tree", 0.4f,0);
+        
         //throw new System.NotImplementedException();
     }
 
@@ -35,7 +36,7 @@ public class JumpingState : State
             if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x)) {
                 // Detectar si es un swipe vertical (arriba o abajo)
                 if (swipeVector.y < -sc._swipeThreshold) {
-                    sc.GetComponent<Rigidbody>().velocity += Vector3.up * Physics.gravity.y * (40f - 1) * Time.deltaTime;
+                    Physics.gravity = new Vector3(0, -30.0F, 0);
                     sc.ChangeState(sc.slidingState);
                 }
             }

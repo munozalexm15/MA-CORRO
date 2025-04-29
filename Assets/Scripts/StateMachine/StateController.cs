@@ -38,12 +38,15 @@ public class StateController : MonoBehaviour
     public CameraShakeEffect cameraShakeEffect;
 
 //Object Pool manager variables
-
     public ObjectPool objPoolManager;
+
+//Collision triggers variables
+    public Vector3 allowedDirection = Vector3.forward;
     
 
     private void Start()
     {
+        Physics.gravity = new Vector3(0, -15.0F, 0);
         animHandler = GetComponent<Animator>();
         ChangeState(runningState);
     }
@@ -105,7 +108,7 @@ public class StateController : MonoBehaviour
         {
             // Moverse hacia el objetivo sin cambiar la altura (Y)
             Vector3 direction = (targetPosition - transform.position).normalized;
-            transform.position += direction * 10 * Time.deltaTime;
+            transform.position += direction * 15 * Time.deltaTime;
         }
     }
 
@@ -121,10 +124,36 @@ public class StateController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter(Collision collision)
     {
-        if (other.gameObject.CompareTag("Obstacle") && currentState != defeatedState) {
-            ChangeState(defeatedState);
+        // Calcula la dirección desde la que viene el objeto (desde el centro del colisionador hacia el objeto que colisiona)
+        Vector3 direction = (collision.transform.position - transform.position).normalized;
+
+        // Convierte la dirección permitida a espacio global
+        Vector3 worldAllowedDirection = transform.TransformDirection(allowedDirection).normalized;
+
+        // Calcula el ángulo con un dot product
+        float dot = Vector3.Dot(direction, worldAllowedDirection);
+
+        Debug.Log(dot);
+
+        if (dot > 0.4f) // Ajusta el umbral según tu necesidad (0.7f ≈ 45 grados)
+        {
+            Debug.Log("Colisión desde dirección permitida");
+            // Aquí va tu lógica para colisiones válidas
+            if (collision.gameObject.CompareTag("Obstacle") && currentState != defeatedState) {
+                ChangeState(defeatedState);
+            }
+        }
+        else
+        {
+            Debug.Log("Colisión desde dirección no permitida, ignorada");
+            // Opcional: anular efectos, rebote, etc.
+
         }
     }
+
+
+    
+    
 }
