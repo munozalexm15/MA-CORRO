@@ -8,12 +8,11 @@ public class JumpingState : State
     {
         sc.animHandler.CrossFade("Jump", 0.4f,0);
         sc.GetComponent<Rigidbody>().velocity = Vector3.up * 8;
+        
     }
 
     protected override void OnExit()
     {
-        sc.animHandler.CrossFade("Blend Tree", 0.4f,0);
-        
         //throw new System.NotImplementedException();
     }
 

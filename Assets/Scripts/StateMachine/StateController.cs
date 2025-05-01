@@ -8,12 +8,13 @@ public class StateController : MonoBehaviour
     State currentState;
 
 /// <summary>
-/// The states that the player will move between. Running (Idle), Sliding and Jumping. More to come
+/// The states that the player will move between. Running (Idle), Sliding, jumping, falling and defeated
 /// </summary>
     public RunningState runningState = new RunningState();
     public SlidingState slidingState = new SlidingState();
     public JumpingState jumpingState = new JumpingState();
     public DefeatedState defeatedState = new DefeatedState();
+    public FallingState fallingState = new FallingState();
 
 /// <summary>
 /// Swipe Variables
@@ -43,6 +44,11 @@ public class StateController : MonoBehaviour
 //Collision triggers variables
     public Vector3 allowedDirection = Vector3.forward;
     
+//Falling state variables
+    public bool isGrounded;
+    public LayerMask groundLayer;
+    public Transform groundCheck;
+    public float groundCheckRadius = 0.2f;
 
     private void Start()
     {
@@ -53,6 +59,7 @@ public class StateController : MonoBehaviour
 
     void Update()
     {
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
         if (currentState != null)
         {
             currentState.OnStateUpdate();
@@ -65,6 +72,8 @@ public class StateController : MonoBehaviour
         if (isRotating) {
             RotatePlayer();
         }
+
+        
     }
 
     public void ChangeState(State newState)
@@ -78,8 +87,14 @@ public class StateController : MonoBehaviour
     }
 
     public void OnJumpEnded() {
-        ChangeState(runningState);
-        
+        isGrounded = Physics.CheckSphere(groundCheck.position, groundCheckRadius, groundLayer);
+        if (!isGrounded)
+        {
+            ChangeState(fallingState);
+        }
+        else {
+            ChangeState(runningState);
+        }
     }
 
     public void RotatePlayer() {
@@ -126,6 +141,7 @@ public class StateController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        
         // Calcula la dirección desde la que viene el objeto (desde el centro del colisionador hacia el objeto que colisiona)
         Vector3 direction = (collision.transform.position - transform.position).normalized;
 
@@ -135,11 +151,8 @@ public class StateController : MonoBehaviour
         // Calcula el ángulo con un dot product
         float dot = Vector3.Dot(direction, worldAllowedDirection);
 
-        Debug.Log(dot);
-
-        if (dot > 0.4f) // Ajusta el umbral según tu necesidad (0.7f ≈ 45 grados)
+        if (dot > 0.7f) // Ajusta el umbral según tu necesidad (0.7f ≈ 45 grados)
         {
-            Debug.Log("Colisión desde dirección permitida");
             // Aquí va tu lógica para colisiones válidas
             if (collision.gameObject.CompareTag("Obstacle") && currentState != defeatedState) {
                 ChangeState(defeatedState);
@@ -147,9 +160,7 @@ public class StateController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Colisión desde dirección no permitida, ignorada");
             // Opcional: anular efectos, rebote, etc.
-
         }
     }
 

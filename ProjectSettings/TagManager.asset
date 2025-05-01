@@ -6,6 +6,7 @@ TagManager:
   tags:
   - TileEnd
   - Obstacle
+  - Lane
   layers:
   - Default
   - TransparentFX
@@ -13,7 +14,7 @@ TagManager:
   - Player
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

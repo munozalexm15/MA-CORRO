@@ -35,6 +35,7 @@ public class SlidingState : State
             if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x)) {
                 // Detectar si es un swipe hacia arriba y el personaje no está saltando 
                 if (swipeVector.y > sc._swipeThreshold && sc.GetComponent<Rigidbody>().velocity.y == 0) {
+                    Debug.Log("arriba");
                     sc.ChangeState(sc.jumpingState);
                 }
             }

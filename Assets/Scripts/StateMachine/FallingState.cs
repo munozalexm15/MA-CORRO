@@ -1,42 +1,31 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.UIElements;
 
-public class RunningState : State
+public class FallingState : State
 {
     protected override void OnEnter()
     {
-        //throw new System.NotImplementedException();
+
+        sc.animHandler.CrossFade("Falling", 0.4f,0);
+
     }
 
     protected override void OnExit()
     {
+        sc.animHandler.CrossFade("Land", 0.0f,0);
         //throw new System.NotImplementedException();
     }
 
     protected override void OnUpdate()
     {
+        if (sc.isGrounded) {
+            sc.ChangeState(sc.runningState);
+        }
         CheckForInput();
-
-        float RunBlendProgress = sc.animHandler.GetFloat("RunBlendProgress");
-        float SpeedMultiplier = sc.animHandler.GetFloat("SpeedMultiplier");
-        if (RunBlendProgress < 1) {
-            sc.animHandler.SetFloat("SpeedMultiplier", SpeedMultiplier + 0.00003f);
-            sc.animHandler.SetFloat("RunBlendProgress", RunBlendProgress + 0.0001f);
-        }
-        if (!sc.isGrounded) {
-            sc.ChangeState(sc.fallingState);
-        }
-        
-        
-        //throw new System.NotImplementedException();
     }
 
     protected void CheckForInput() {
-
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
             sc.startTouchPos = Input.GetTouch(0).position;
         }
@@ -50,10 +39,8 @@ public class RunningState : State
             if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x)) {
                 // Detectar si es un swipe vertical (arriba o abajo)
                 if (swipeVector.y < -sc._swipeThreshold) {
+                    Physics.gravity = new Vector3(0, -30.0F, 0);
                     sc.ChangeState(sc.slidingState);
-                }
-                if (swipeVector.y > sc._swipeThreshold) {
-                    sc.ChangeState(sc.jumpingState);
                 }
             }
             // Si el desplazamiento en el eje X es mayor, es un swipe horizontal (cambiar de carril)
@@ -91,4 +78,5 @@ public class RunningState : State
             }
         }
     }
+    
 }
