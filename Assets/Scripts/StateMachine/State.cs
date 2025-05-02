@@ -29,6 +29,14 @@ public abstract class State
         // Code placed here can be overridden
     }
 
+    public void OnStateFixedUpdate() {
+        OnFixedUpdate();
+    }
+
+    protected virtual void OnFixedUpdate() {
+
+    }
+
     public void OnStateExit()
     {
         // Code placed here will always run

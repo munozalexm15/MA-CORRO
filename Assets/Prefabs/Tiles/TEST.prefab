@@ -50,7 +50,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2d08def5a6c6664084d776e00175e86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 8
   canMove: 1
 --- !u!114 &6843042596621202855
 MonoBehaviour:
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 8547025717026426104}
   m_Layer: 6
   m_Name: Cube (3)
-  m_TagString: Lane
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -268,7 +268,7 @@ GameObject:
   - component: {fileID: 6148924126261454081}
   m_Layer: 6
   m_Name: Cube (2)
-  m_TagString: Lane
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -539,7 +539,7 @@ GameObject:
   - component: {fileID: 3519250523578973570}
   m_Layer: 6
   m_Name: Cube (4)
-  m_TagString: Lane
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

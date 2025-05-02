@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class StateController : MonoBehaviour
 {
-    State currentState;
+    public State currentState;
+    public State previousState;
 
 /// <summary>
 /// The states that the player will move between. Running (Idle), Sliding, jumping, falling and defeated
@@ -72,8 +73,13 @@ public class StateController : MonoBehaviour
         if (isRotating) {
             RotatePlayer();
         }
+    }
 
-        
+    void FixedUpdate()
+    {
+        if (currentState != null) {
+            currentState.OnStateFixedUpdate();
+        }
     }
 
     public void ChangeState(State newState)
@@ -81,7 +87,7 @@ public class StateController : MonoBehaviour
         if (currentState != null)
         {
             currentState.OnStateExit();
-        }
+        };
         currentState = newState;
         currentState.OnStateEnter(this);
     }
@@ -112,20 +118,29 @@ public class StateController : MonoBehaviour
         }
     }
 
-    public void MoveToLane() {
+   public void MoveToLane() {
         // Clonar la posición del target pero con el mismo Y que el personaje
-        Vector3 targetPosition = new Vector3(currentLane.GetComponent<Transform>().position.x, transform.position.y, currentLane.GetComponent<Transform>().position.z);
+        Vector3 targetPosition = new Vector3(currentLane.GetComponent<Transform>().position.x, transform.position.y, transform.position.z);
 
         // Calcular la distancia ignorando diferencias en Y
-        float distance = Vector3.Distance(transform.position, targetPosition);
+        float distance = Vector3.Distance(new Vector3(transform.position.x, 0f, transform.position.z), new Vector3(targetPosition.x, 0f, transform.position.z));
 
-        if (distance > 0.1f)
+        if (distance > 0.2f) // Aumenta el umbral para evitar movimientos innecesarios
         {
-            // Moverse hacia el objetivo sin cambiar la altura (Y)
+            // Moverse solo en el eje X sin cambiar la altura (Y) ni Z
             Vector3 direction = (targetPosition - transform.position).normalized;
+            direction.y = 0;  // Evitar cualquier movimiento vertical
+            direction.z = 0;  // Evitar cualquier movimiento en Z
             transform.position += direction * 15 * Time.deltaTime;
         }
+        else {
+            // Asegurarse de que la posición esté exactamente en la del objetivo
+            transform.position = new Vector3(targetPosition.x, transform.position.y, transform.position.z);
+            IsChangingLane = false;
+        }
     }
+
+
 
     public void MoveCameraToLane() {
         if (currentLane.name == "CentralLane") {

@@ -11,10 +11,11 @@ public class MoveTowardsPlayer : MonoBehaviour
         // Asumimos que el jugador tiene la etiqueta "Player"
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (canMove)
         {
+            //GetComponent<Rigidbody>().MovePosition(Vector3.back * speed * Time.deltaTime);
             transform.position += Vector3.back * speed * Time.deltaTime; // Moverse hacia el jugador
         }
     }

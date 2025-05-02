@@ -430,7 +430,6 @@ GameObject:
   - component: {fileID: 4056870660416825617}
   - component: {fileID: 8226373416634057447}
   - component: {fileID: 6310092423756155298}
-  - component: {fileID: 3770236554538719740}
   m_Layer: 3
   m_Name: Alejandro 1
   m_TagString: Player
@@ -559,23 +558,6 @@ MonoBehaviour:
     m_Bits: 64
   groundCheck: {fileID: 337016957241873090}
   groundCheckRadius: 0.2
---- !u!114 &3770236554538719740
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2260602477154032316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89186e8bc79ac484e810e17939952aeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
-  footOffset: 0.1
-  raycastDistance: 1.5
 --- !u!1 &2297680868488859067
 GameObject:
   m_ObjectHideFlags: 0
