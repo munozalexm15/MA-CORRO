@@ -1008,7 +1008,6 @@ GameObject:
   - component: {fileID: 3545346767841906908}
   - component: {fileID: 6840563103953596527}
   - component: {fileID: 6840563103953596529}
-  - component: {fileID: 6840563103953596530}
   m_Layer: 3
   m_Name: Alejandro
   m_TagString: Player
@@ -2127,29 +2126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21413b1e01f95e948bf7f7f0c2c4d19c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!136 &6840563103953596530
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1594337761499865969}
-  m_Material: {fileID: 13400000, guid: 35c4c676bc86d9d4a95bce6b994523d9, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1.515416
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.7173649, z: 0}
+  raycastDistance: 1.5
 --- !u!1 &6867861995632323454
 GameObject:
   m_ObjectHideFlags: 0

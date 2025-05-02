@@ -1,52 +1,97 @@
 using UnityEngine;
 
-public class PlatformFollower : MonoBehaviour
+public class SlopeHandler : MonoBehaviour
 {
-    private bool onSlope = false;
     private Vector3 platformDirection = Vector3.zero;
     private float platformSpeed = 0f;
     private float initialZPosition;
+    private Quaternion originalRotation;
+    private Quaternion targetRotation;
+    private Transform currentSlope;
+
+    private int framesWithoutSlope = 0;
+    public int maxFramesWithoutSlope = 5;
+
+    public float raycastDistance = 1.5f;
+    public float rotationSmoothSpeed = 5f; // Velocidad de suavizado
 
     void Start()
     {
-        // Guarda la posición Z inicial del jugador al comienzo.
         initialZPosition = transform.position.z;
+        originalRotation = transform.rotation;
+        targetRotation = originalRotation;
     }
 
     void Update()
     {
-        if (onSlope || GetComponent<StateController>().isGrounded)
+        Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
+        RaycastHit hit;
+        
+        if (Physics.Raycast(ray, out hit, raycastDistance))
         {
-            // Movemos al jugador pero mantenemos la posición Z constante.
-            Vector3 newPosition = transform.position + platformDirection * platformSpeed * Time.deltaTime;
-            newPosition.z = initialZPosition;  // Fijamos Z a la posición inicial.
+            if (hit.collider.CompareTag("Slope"))
+            {
+                framesWithoutSlope = 0;
 
+                if (currentSlope != hit.collider.transform)
+                {
+                    currentSlope = hit.collider.transform;
+
+                   Vector3 slopeNormal = hit.normal;
+
+                    // Proyectar la normal sobre el plano ZY (para aislar inclinación hacia adelante/atrás)
+                    Vector3 forwardProjection = Vector3.ProjectOnPlane(slopeNormal, transform.right);
+
+                    // Obtener el ángulo entre el 'up' y esa proyección
+                    float angle = Vector3.SignedAngle(Vector3.up, forwardProjection, transform.right);
+
+                    // Amplificar el ángulo si se desea
+                    angle *= 2.5f; // Cambia esto a gusto: 1.0 = igual que la rampa, >1.0 = más inclinación
+
+                    // Crear una rotación solo en el eje X
+                    targetRotation = Quaternion.Euler(angle, originalRotation.eulerAngles.y, originalRotation.eulerAngles.z);
+
+
+                    platformDirection = -currentSlope.forward;
+
+                    MoveTowardsPlayer mp = currentSlope.GetComponent<MoveTowardsPlayer>();
+                    platformSpeed = mp != null ? mp.speed : 5f;
+                }
+            }
+            else
+            {
+                framesWithoutSlope++;
+            }
+        }
+        else
+        {
+            framesWithoutSlope++;
+        }
+
+        if (framesWithoutSlope >= maxFramesWithoutSlope)
+        {
+            ResetSlope();
+        }
+
+        // Aplicar rotación suavemente
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmoothSpeed);
+
+        if (currentSlope != null || GetComponent<StateController>().isGrounded)
+        {
+            Vector3 newPosition = transform.position + platformDirection * platformSpeed * Time.deltaTime;
+            newPosition.z = initialZPosition;
             transform.position = newPosition;
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void ResetSlope()
     {
-        if (other.CompareTag("Slope"))
+        if (currentSlope != null)
         {
-            onSlope = true;
-
-            // Dirección contraria al movimiento para simular que sube con la rampa
-            platformDirection = -other.transform.forward;
-
-            // Si usas un script para mover la plataforma, puedes leer la velocidad
-            MoveTowardsPlayer mp = other.GetComponent<MoveTowardsPlayer>();
-            platformSpeed = mp != null ? mp.speed : 5f; // valor por defecto
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Slope"))
-        {
-            onSlope = false;
+            currentSlope = null;
             platformDirection = Vector3.zero;
             platformSpeed = 0f;
+            targetRotation = originalRotation;
         }
     }
 }

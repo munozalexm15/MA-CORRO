@@ -33,7 +33,6 @@ public class RunningState : State
     {
         float RunBlendProgress = sc.animHandler.GetFloat("RunBlendProgress");
         float SpeedMultiplier = sc.animHandler.GetFloat("SpeedMultiplier");
-        Debug.Log(RunBlendProgress);
         if (RunBlendProgress < 1) {
             sc.animHandler.SetFloat("SpeedMultiplier", SpeedMultiplier + 0.00003f);
             sc.animHandler.SetFloat("RunBlendProgress", RunBlendProgress + 0.0001f);
