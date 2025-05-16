@@ -5,57 +5,110 @@ using System.Linq;
 public class ObjectPool : MonoBehaviour
 {
     public List<GameObject> prefabs; // Ahora es una lista de prefabs
+
+    private Dictionary<TileMetadata.TileType, List<GameObject>> prefabsByType = new Dictionary<TileMetadata.TileType, List<GameObject>>();
+    private TileMetadata.TileType currentType;
+    private int tilesRemainingInGroup = 0;
+    public int minGroupSize = 3;
+    public int maxGroupSize = 6;
+    
     public int poolSize = 10; // Número de objetos en la pool
     private Queue<GameObject> objectPool = new Queue<GameObject>(); // Cola de objetos disponibles
     public List<GameObject> activeObjects = new List<GameObject>(); // Lista de objetos activos
 
-    void Start()
+   void Start()
     {
-        // Rellenamos la pool con objetos inactivos al inicio
+        // Agrupar prefabs por tipo
+        foreach (GameObject prefab in prefabs)
+        {
+            TileMetadata meta = prefab.GetComponent<TileMetadata>();
+            if (meta == null) continue;
+
+            if (!prefabsByType.ContainsKey(meta.tileType))
+            {
+                prefabsByType[meta.tileType] = new List<GameObject>();
+            }
+            prefabsByType[meta.tileType].Add(prefab);
+        }
+
+        // Seleccionamos un tipo inicial
+        currentType = GetRandomTileType();
+        tilesRemainingInGroup = Random.Range(minGroupSize, maxGroupSize + 1);
+
+        // Inicializar pool
         for (int i = 0; i < poolSize; i++)
         {
-            GameObject prefabToInstantiate = prefabs[Random.Range(0, prefabs.Count)];
+            GameObject prefabToInstantiate = GetRandomPrefabOfType(currentType);
             GameObject obj = Instantiate(prefabToInstantiate);
             obj.SetActive(false);
             objectPool.Enqueue(obj);
             obj.GetComponent<TileTrigger>().objectPool = this;
         }
 
-        // Activamos uno de prueba si quieres
+        // Activar uno de prueba
         GameObject activeObj = GetObject();
     }
+
 
     // Método para obtener un objeto de la pool
     public GameObject GetObject()
     {
-        if (objectPool.Count > 0)
+        // Ver si cambiamos de tipo
+        if (tilesRemainingInGroup <= 0)
         {
-            List<GameObject> objectList = new List<GameObject>(objectPool);
-            int randomIndex = Random.Range(0, objectList.Count);
-            GameObject obj = objectList[randomIndex];
+            currentType = GetRandomTileType();
+            tilesRemainingInGroup = Random.Range(minGroupSize, maxGroupSize + 1);
+        }
 
-            objectPool = new Queue<GameObject>(objectPool.Where(item => item != obj));
+        GameObject obj = null;
 
-            obj.SetActive(true);
-            obj.transform.position = transform.position;
-
-            if (!activeObjects.Contains(obj))
+        // Buscar uno en la pool que sea del tipo actual
+        foreach (GameObject pooled in objectPool)
+        {
+            TileMetadata meta = pooled.GetComponent<TileMetadata>();
+            if (meta != null && meta.tileType == currentType)
             {
-                activeObjects.Add(obj);
+                obj = pooled;
+                break;
             }
+        }
 
-            return obj;
+        if (obj != null)
+        {
+            objectPool = new Queue<GameObject>(objectPool.Where(item => item != obj));
         }
         else
         {
-            // Si no hay objetos disponibles, instanciamos uno nuevo aleatorio
-            GameObject prefabToInstantiate = prefabs[Random.Range(0, prefabs.Count)];
-            GameObject newObj = Instantiate(prefabToInstantiate, transform.position, Quaternion.identity);
-            newObj.GetComponent<TileTrigger>().objectPool = this;
-            activeObjects.Add(newObj);
-            return newObj;
+            // Instanciar uno nuevo del tipo actual
+            GameObject prefabToInstantiate = GetRandomPrefabOfType(currentType);
+            obj = Instantiate(prefabToInstantiate);
+            obj.GetComponent<TileTrigger>().objectPool = this;
         }
+
+        obj.SetActive(true);
+        obj.transform.position = transform.position;
+
+        if (!activeObjects.Contains(obj))
+            activeObjects.Add(obj);
+
+        tilesRemainingInGroup--;
+
+        return obj;
     }
+
+    private TileMetadata.TileType GetRandomTileType()
+    {
+        TileMetadata.TileType[] types = prefabsByType.Keys.ToArray();
+        return types[Random.Range(0, types.Length)];
+    }
+
+    private GameObject GetRandomPrefabOfType(TileMetadata.TileType type)
+    {
+        List<GameObject> list = prefabsByType[type];
+        return list[Random.Range(0, list.Count)];
+    }
+
+
 
     // Método para devolver un objeto a la pool
     public void ReturnObject(GameObject obj)
