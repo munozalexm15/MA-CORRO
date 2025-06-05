@@ -20,12 +20,13 @@ public class RunningState : State
     protected override void OnUpdate()
     {
         CheckForInput();
-       
-        if (!sc.isGrounded) {
+
+        if (!sc.isGrounded)
+        {
             sc.ChangeState(sc.fallingState);
         }
-        
-        
+
+
         //throw new System.NotImplementedException();
     }
 
@@ -33,44 +34,63 @@ public class RunningState : State
     {
         float RunBlendProgress = sc.animHandler.GetFloat("RunBlendProgress");
         float SpeedMultiplier = sc.animHandler.GetFloat("SpeedMultiplier");
-        if (RunBlendProgress < 1) {
+        if (RunBlendProgress < 1)
+        {
             sc.animHandler.SetFloat("SpeedMultiplier", SpeedMultiplier + 0.00003f);
             sc.animHandler.SetFloat("RunBlendProgress", RunBlendProgress + 0.0001f);
         }
-        
+
     }
 
-    protected void CheckForInput() {
+    protected void CheckForInput()
+    {
 
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began) {
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+        {
             sc.startTouchPos = Input.GetTouch(0).position;
         }
 
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended) {
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended)
+        {
             sc.endTouchPos = Input.GetTouch(0).position;
 
             Vector2 swipeVector = sc.endTouchPos - sc.startTouchPos;
-            
-            // Si el desplazamiento en el eje Y es mayor que en el eje X, es un swipe vertical
-            if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x)) {
-                // Detectar si es un swipe vertical (arriba o abajo)
-                if (swipeVector.y < -sc._swipeThreshold) {
+
+            // Swipe vertical
+            if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x))
+            {
+                if (swipeVector.y < -sc._swipeThreshold)
+                {
                     sc.ChangeState(sc.slidingState);
                 }
-                if (swipeVector.y > sc._swipeThreshold) {
+                if (swipeVector.y > sc._swipeThreshold)
+                {
                     sc.ChangeState(sc.jumpingState);
                 }
             }
-            // Si el desplazamiento en el eje X es mayor, es un swipe horizontal (cambiar de carril)
-            else {
-                // Ver si se ha desplazado el dedo en la pantalla en dirección horizontal
-                if (swipeVector.x < -sc._swipeThreshold) {
-                    if (sc.currentLane.name == "LeftLane") {
+            // Swipe horizontal
+            else
+            {
+                Vector3 rayOrigin = sc.transform.position;
+                float rayDistance = 2f; // Ajusta la distancia si es necesario
+                Vector3 direction = Vector3.zero;
+
+                if (swipeVector.x < -sc._swipeThreshold)
+                {
+                    direction = Vector3.left;
+
+                    // Verificar si hay una pared a la izquierda
+                    if (Physics.Raycast(rayOrigin, direction, rayDistance, LayerMask.GetMask("Wall")))
+                    {
                         return;
                     }
 
-                    for (int i = 0; i < sc.lanes.Count; i++) {
-                        if (sc.lanes[i].name == sc.currentLane.name) {
+                    if (sc.currentLane.name == "LeftLane") return;
+
+                    for (int i = 0; i < sc.lanes.Count; i++)
+                    {
+                        if (sc.lanes[i].name == sc.currentLane.name)
+                        {
                             sc.currentLane = sc.lanes[i - 1];
                             sc.IsChangingLane = true;
                             sc.MoveCameraToLane();
@@ -79,13 +99,22 @@ public class RunningState : State
                     }
                 }
 
-                if (swipeVector.x > sc._swipeThreshold) {
-                    if (sc.currentLane.name == "RightLane") {
+                if (swipeVector.x > sc._swipeThreshold)
+                {
+                    direction = Vector3.right;
+
+                    // Verificar si hay una pared a la derecha
+                    if (Physics.Raycast(rayOrigin, direction, rayDistance, LayerMask.GetMask("Wall")))
+                    {
                         return;
                     }
 
-                    for (int i = 0; i < sc.lanes.Count; i++) {
-                        if (sc.lanes[i].name == sc.currentLane.name) {
+                    if (sc.currentLane.name == "RightLane") return;
+
+                    for (int i = 0; i < sc.lanes.Count; i++)
+                    {
+                        if (sc.lanes[i].name == sc.currentLane.name)
+                        {
                             sc.currentLane = sc.lanes[i + 1];
                             sc.IsChangingLane = true;
                             sc.MoveCameraToLane();

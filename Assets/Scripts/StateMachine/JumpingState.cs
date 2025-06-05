@@ -7,7 +7,7 @@ public class JumpingState : State
     protected override void OnEnter()
     {
         sc.animHandler.CrossFade("Jump", 0.4f,0);
-        sc.GetComponent<Rigidbody>().velocity = Vector3.up * 8;
+        sc.GetComponent<Rigidbody>().velocity = Vector3.up * 9;
         
     }
 

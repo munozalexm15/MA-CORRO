@@ -3,7 +3,12 @@ guid: f0096350d9d09774998c76a020bd9f4b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: platformer
+    second: {fileID: 2100000, guid: cff33dd718a4d99479d6b513b2ac0d3f, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

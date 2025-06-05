@@ -13,9 +13,10 @@ public class TileTrigger : MonoBehaviour
     {
         // Cuando el jugador pasa por el trigger, devolvemos el objeto al pool
         if (other.CompareTag("Player"))
-        { 
-            objectPool.ReturnObject(gameObject);
-            gameObject.SetActive(false); // Desactivar el objeto
+        {
+            objectPool.ReturnObject(gameObject, true);
+
+           
             
             if (!objectPool.activeObjects.Contains(gameObject))
             {

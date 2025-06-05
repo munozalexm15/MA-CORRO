@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class SlidingState : State
 {
+
     protected override void OnEnter()
     {
-        sc.animHandler.CrossFade("Slide", 0.2f,0);
+        sc.animHandler.CrossFade("Slide", 0.2f, 0);
+        sc.playerCollider.size -= new Vector3(0, sc.playerCollider.size.y / 1.5f, 0);
+        sc.playerCollider.center -= new Vector3(0, sc.playerCollider.center.y / 1.5f, 0);
     }
 
     protected override void OnExit()
     {
-        sc.animHandler.CrossFade("Blend Tree", 0.2f,0);
+        sc.animHandler.CrossFade("Blend Tree", 0.2f, 0);
         Physics.gravity = new Vector3(0, -15.0F, 0);
+        sc.playerCollider.size = sc.originalSize;
+        sc.playerCollider.center = sc.originalCenter;
         //throw new System.NotImplementedException();
     }
 
@@ -41,13 +46,26 @@ public class SlidingState : State
             // Si el desplazamiento en el eje X es mayor, es un swipe horizontal (cambiar de carril)
             else {
                 // Ver si se ha desplazado el dedo en la pantalla en dirección horizontal
-                if (swipeVector.x < -sc._swipeThreshold) {
-                    if (sc.currentLane.name == "LeftLane") {
+                
+                 Vector3 rayOrigin = sc.transform.position; 
+                float rayDistance = 2f;                     
+                Vector3 direction = Vector3.zero;           
+                if (swipeVector.x < -sc._swipeThreshold)
+                {
+                    direction = Vector3.left;
+                    if (Physics.Raycast(rayOrigin, direction, rayDistance, LayerMask.GetMask("Wall"))) {    
+                        return;                                                                          
+                    }
+
+                    if (sc.currentLane.name == "LeftLane")
+                    {
                         return;
                     }
 
-                    for (int i = 0; i < sc.lanes.Count; i++) {
-                        if (sc.lanes[i].name == sc.currentLane.name) {
+                    for (int i = 0; i < sc.lanes.Count; i++)
+                    {
+                        if (sc.lanes[i].name == sc.currentLane.name)
+                        {
                             sc.currentLane = sc.lanes[i - 1];
                             sc.IsChangingLane = true;
                             sc.MoveCameraToLane();
@@ -61,8 +79,16 @@ public class SlidingState : State
                         return;
                     }
 
-                    for (int i = 0; i < sc.lanes.Count; i++) {
-                        if (sc.lanes[i].name == sc.currentLane.name) {
+                    direction = Vector3.right;           
+                    // Verificar si hay una pared a la derecha
+                    if (Physics.Raycast(rayOrigin, direction, rayDistance, LayerMask.GetMask("Wall"))) { 
+                        return;                                                                         
+                    }
+
+                    for (int i = 0; i < sc.lanes.Count; i++)
+                    {
+                        if (sc.lanes[i].name == sc.currentLane.name)
+                        {
                             sc.currentLane = sc.lanes[i + 1];
                             sc.IsChangingLane = true;
                             sc.MoveCameraToLane();

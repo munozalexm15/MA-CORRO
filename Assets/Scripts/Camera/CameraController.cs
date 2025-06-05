@@ -2,39 +2,54 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Vector3 basePosition = new Vector3(0, 5, -10); // Posición inicial de la cámara
+    public Transform player; // Referencia al jugador
+
+    public Vector3 baseOffset = new Vector3(0, 5, -10); // Offset relativo al jugador
     public float laneChangeSpeed = 10f; // Velocidad del movimiento lateral
+    public float verticalFollowSpeed = 5f; // Suavidad para seguir en Y
 
     [Header("Lane Offset Settings")]
-    public float leftOffset = -1f;    // Offset cuando el jugador está en el carril izquierdo
-    public float centerOffset = 0f;   // Offset cuando está en el centro
-    public float rightOffset = 1f;    // Offset cuando está en el carril derecho
+    public float leftOffset = -1f;
+    public float centerOffset = 0f;
+    public float rightOffset = 1f;
 
     private float targetXOffset = 0f;
+    private float currentYOffset = 0f;
     private Vector3 initialRotation;
+
+    public Shader cameraShader;
 
     void Start()
     {
-        transform.position = basePosition;
-        initialRotation = transform.eulerAngles; // Guardar rotación inicial
+        GetComponent<Camera>().SetReplacementShader(cameraShader, "RenderType");
+        transform.position = player.position + baseOffset;
+        currentYOffset = baseOffset.y;
+        initialRotation = transform.eulerAngles;
     }
 
     void LateUpdate()
     {
-        // Queremos que solo cambie en X
-        Vector3 desiredPosition = basePosition + new Vector3(targetXOffset, 0, 0);
+        if (!player) return;
 
-        // Suavemente mover la cámara hacia el objetivo
+        // Calcular el nuevo Y deseado en base a la posición del jugador
+        float desiredY = player.position.y + baseOffset.y;
+        currentYOffset = Mathf.Lerp(currentYOffset, desiredY, verticalFollowSpeed * Time.deltaTime);
+
+        // Calcular la nueva posición de la cámara
+        Vector3 desiredPosition = new Vector3(
+            player.position.x + targetXOffset,
+            currentYOffset,
+            player.position.z + baseOffset.z
+        );
+
         transform.position = Vector3.Lerp(transform.position, desiredPosition, laneChangeSpeed * Time.deltaTime);
 
-        // Mantener siempre la misma rotación
+        // Mantener la rotación original
         transform.eulerAngles = initialRotation;
     }
 
-    // Función para cambiar de carril
     public void ChangeLane(int laneIndex)
     {
-        // laneIndex: -1 = izquierda, 0 = centro, 1 = derecha
         if (laneIndex == -1)
             targetXOffset = leftOffset;
         else if (laneIndex == 0)

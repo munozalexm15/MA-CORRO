@@ -19,7 +19,8 @@ public class FallingState : State
 
     protected override void OnUpdate()
     {
-        if (sc.isGrounded) {
+        if (sc.isGrounded)
+        {
             sc.ChangeState(sc.runningState);
         }
         CheckForInput();
