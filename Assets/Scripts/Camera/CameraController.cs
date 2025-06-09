@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform player; // Referencia al jugador
+    public Rigidbody playerRigidbody; // ← Ahora seguimos el Rigidbody, no el Transform
 
-    public Vector3 baseOffset = new Vector3(0, 5, -10); // Offset relativo al jugador
-    public float laneChangeSpeed = 10f; // Velocidad del movimiento lateral
-    public float verticalFollowSpeed = 5f; // Suavidad para seguir en Y
+    public Vector3 baseOffset = new Vector3(0, 5, -10);
+    public float verticalFollowSpeed = 5f;
 
     [Header("Lane Offset Settings")]
     public float leftOffset = -1f;
@@ -16,18 +15,19 @@ public class CameraController : MonoBehaviour
     private float targetXOffset = 0f;
     private float currentYOffset = 0f;
     private Vector3 initialRotation;
+    private Vector3 velocity = Vector3.zero;
 
     public Shader cameraShader;
 
     void Start()
     {
         GetComponent<Camera>().SetReplacementShader(cameraShader, "RenderType");
-        transform.position = player.position + baseOffset;
+        transform.position = playerRigidbody.position + baseOffset;
         currentYOffset = baseOffset.y;
         initialRotation = transform.eulerAngles;
     }
 
-    void FixedUpdate()
+    void LateUpdate() // ← ¡Movemos la cámara en LateUpdate ahora!
     {
         UpdateCamera();
     }
@@ -40,28 +40,29 @@ public class CameraController : MonoBehaviour
             targetXOffset = centerOffset;
         else if (laneIndex == 1)
             targetXOffset = rightOffset;
-    }
 
-    private Vector3 velocity = Vector3.zero;
+        velocity = Vector3.zero; // Resetea la velocidad para evitar tirones bruscos
+    }
 
     void UpdateCamera()
     {
-        if (!player) return;
+        if (!playerRigidbody) return;
 
-        float desiredY = player.position.y + baseOffset.y;
-        currentYOffset = Mathf.Lerp(currentYOffset, desiredY, verticalFollowSpeed * Time.fixedDeltaTime);
+        // Y sigue suavemente
+        float desiredY = playerRigidbody.position.y + baseOffset.y;
+        currentYOffset = Mathf.Lerp(currentYOffset, desiredY, verticalFollowSpeed * Time.deltaTime);
 
+        // Calcula la nueva posición deseada de la cámara
         Vector3 desiredPosition = new Vector3(
-            player.position.x + targetXOffset,
+            playerRigidbody.position.x + targetXOffset,
             currentYOffset,
-            player.position.z + baseOffset.z
+            playerRigidbody.position.z + baseOffset.z
         );
 
-        // Movimiento más suave con aceleración
+        // Movimiento suave con SmoothDamp
         transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, 0.1f);
 
+        // Fijar rotación si lo deseas
         transform.eulerAngles = initialRotation;
     }
-
-
 }

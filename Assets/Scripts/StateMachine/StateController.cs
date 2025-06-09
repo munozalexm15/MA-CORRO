@@ -69,10 +69,16 @@ public class StateController : MonoBehaviour
 
     private Rigidbody rb;
 
+    public float maxLaneChangeDuration = 0.5f; // segundos
+    private float laneChangeTimer = 0f;
+
 
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
+        rb.interpolation = RigidbodyInterpolation.Interpolate;
+        cameraController.playerRigidbody = rb;
+
         playerCollider = GetComponent<BoxCollider>();
         originalCenter = playerCollider.center;
         originalSize = playerCollider.size;
@@ -98,6 +104,7 @@ public class StateController : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log(rb.velocity);
         if (currentState != null)
         {
             if (currentState == defeatedState)
@@ -137,41 +144,53 @@ public class StateController : MonoBehaviour
         }
     }
 
-    public void RotatePlayer() {
-
-        Vector3 targetLookAt = new(currentLane.GetComponent<Transform>().position.x, 1, currentLane.GetComponent<Transform>().position.z + 1);
-
-    // Mientras mira al objetivo
+    public void RotatePlayer()
+    {
+        Vector3 targetLookAt = new Vector3(currentLane.transform.position.x, transform.position.y, currentLane.transform.position.z + 1f);
         Vector3 direction = targetLookAt - transform.position;
-        direction.y = 0; // Solo rotación horizontal
+        direction.y = 0;
 
-        if (direction != Vector3.zero)
+        if (direction.sqrMagnitude > 0.001f)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * 20);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * 10f);
         }
     }
 
-    public void MoveToLane() {
-        // Clonar la posición del target pero con el mismo Y que el personaje
-        Vector3 targetPosition = new Vector3(currentLane.transform.position.x, rb.position.y, rb.position.z);
-        // Calcular la distancia ignorando diferencias en Y
-        float distance = Vector3.Distance(new Vector3(rb.position.x, 0f, rb.position.z), new Vector3(targetPosition.x, 0f, rb.position.z));
+    public void StartLaneChange()
+    {
+        laneChangeTimer = 0f;
+        IsChangingLane = true;
+    }
 
-        if (distance > 0.2f)
+    public void MoveToLane()
+    {
+        float targetX = currentLane.transform.position.x;
+        float deltaX = targetX - rb.position.x;
+
+        if (Mathf.Abs(deltaX) > 0.1f)
         {
-            Vector3 direction = (targetPosition - rb.position).normalized;
-            direction.y = 0;
-            direction.z = 0;
-            rb.MovePosition(rb.position + direction * 15 * Time.fixedDeltaTime);
+            float direction = Mathf.Sign(deltaX);
+
+            Vector3 newVelocity = rb.velocity;
+            newVelocity.x = direction * 10f; // brusco y rápido
+            rb.velocity = newVelocity;
         }
         else
         {
-            rb.MovePosition(new Vector3(targetPosition.x, rb.position.y, rb.position.z));
+            // 👇 Forzamos el centrado para eliminar el jitter
+            rb.position = new Vector3(targetX, rb.position.y, rb.position.z);
+
+            Vector3 newVelocity = rb.velocity;
+            newVelocity.x = 0f;
+            rb.velocity = newVelocity;
+
             IsChangingLane = false;
-            Debug.Log("quietecito");
         }
     }
+
+
+
 
     public void MoveCameraToLane() {
         if (currentLane.name == "CentralLane")

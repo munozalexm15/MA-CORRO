@@ -70,6 +70,7 @@ public class JumpingState : State
                         if (sc.lanes[i].name == sc.currentLane.name)
                         {
                             sc.currentLane = sc.lanes[i - 1];
+                            sc.StartLaneChange();
                             sc.IsChangingLane = true;
                             sc.MoveCameraToLane();
                             return;
@@ -89,6 +90,7 @@ public class JumpingState : State
                         if (sc.lanes[i].name == sc.currentLane.name)
                         {
                             sc.currentLane = sc.lanes[i + 1];
+                            sc.StartLaneChange();
                             sc.IsChangingLane = true;
                             sc.MoveCameraToLane();
                             return;

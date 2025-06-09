@@ -318,9 +318,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed57f330c24a1e2489b4376fae255ae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8658113297837461902}
+  playerRigidbody: {fileID: 8658113297837461905}
   baseOffset: {x: 0, y: 6, z: -7.3}
-  laneChangeSpeed: 10
   verticalFollowSpeed: 5
   leftOffset: 0.5
   centerOffset: 0
@@ -437,13 +436,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 392465336}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.08715578, y: 0, z: 0, w: 0.9961947}
-  m_LocalPosition: {x: 0, y: 6, z: -17.01}
+  m_LocalRotation: {x: 0.17913914, y: -0, z: -0, w: 0.98382384}
+  m_LocalPosition: {x: 0, y: 8.2, z: -16.18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 20.639, y: 0, z: 0}
 --- !u!65 &392465347
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5310,12 +5309,12 @@ PrefabInstance:
     - target: {fileID: 1140476989713183337, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.13
       objectReference: {fileID: 0}
     - target: {fileID: 1140476989713183337, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.06
       objectReference: {fileID: 0}
     - target: {fileID: 1140476989713183337, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
         type: 3}
@@ -5365,7 +5364,7 @@ PrefabInstance:
     - target: {fileID: 8284554581503006494, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
         type: 3}
       propertyPath: m_Interpolate
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8284554581503006494, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
         type: 3}
@@ -5696,6 +5695,12 @@ GameObject:
 --- !u!4 &8658113297837461902 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1140476989713183337, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
+    type: 3}
+  m_PrefabInstance: {fileID: 7362456076101446904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &8658113297837461905 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8284554581503006494, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
     type: 3}
   m_PrefabInstance: {fileID: 7362456076101446904}
   m_PrefabAsset: {fileID: 0}

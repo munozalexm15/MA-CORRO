@@ -7,7 +7,8 @@ public class BasicConfigController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Application.targetFrameRate = 60;
+        Time.fixedDeltaTime = 1f / 60f;
+        Application.targetFrameRate = 60;
         //QualitySettings.vSyncCount = 0;
     }
 
