@@ -182,6 +182,10 @@ public class ObjectPool : MonoBehaviour
     {
         foreach (GameObject obj in activeObjects)
         {
+            if (!obj)
+            {
+                continue;
+            }
             MoveTowardsPlayer mover = obj.GetComponent<MoveTowardsPlayer>();
             if (mover != null)
             {

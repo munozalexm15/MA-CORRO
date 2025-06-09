@@ -22,7 +22,7 @@ public class SlopeHandler : MonoBehaviour
         targetRotation = originalRotation;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         Ray ray = new Ray(transform.position + Vector3.up * 0.1f, Vector3.down);
         RaycastHit hit;
@@ -74,11 +74,11 @@ public class SlopeHandler : MonoBehaviour
         }
 
         // Aplicar rotación suavemente
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSmoothSpeed);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.fixedDeltaTime * rotationSmoothSpeed);
 
         if (currentSlope != null || GetComponent<StateController>().isGrounded)
         {
-            Vector3 newPosition = transform.position + platformDirection * platformSpeed * Time.deltaTime;
+            Vector3 newPosition = transform.position + platformDirection * platformSpeed * Time.fixedDeltaTime;
             newPosition.z = initialZPosition;
             transform.position = newPosition;
         }

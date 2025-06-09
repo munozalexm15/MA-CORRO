@@ -27,25 +27,9 @@ public class CameraController : MonoBehaviour
         initialRotation = transform.eulerAngles;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
-        if (!player) return;
-
-        // Calcular el nuevo Y deseado en base a la posición del jugador
-        float desiredY = player.position.y + baseOffset.y;
-        currentYOffset = Mathf.Lerp(currentYOffset, desiredY, verticalFollowSpeed * Time.deltaTime);
-
-        // Calcular la nueva posición de la cámara
-        Vector3 desiredPosition = new Vector3(
-            player.position.x + targetXOffset,
-            currentYOffset,
-            player.position.z + baseOffset.z
-        );
-
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, laneChangeSpeed * Time.deltaTime);
-
-        // Mantener la rotación original
-        transform.eulerAngles = initialRotation;
+        UpdateCamera();
     }
 
     public void ChangeLane(int laneIndex)
@@ -57,4 +41,27 @@ public class CameraController : MonoBehaviour
         else if (laneIndex == 1)
             targetXOffset = rightOffset;
     }
+
+    private Vector3 velocity = Vector3.zero;
+
+    void UpdateCamera()
+    {
+        if (!player) return;
+
+        float desiredY = player.position.y + baseOffset.y;
+        currentYOffset = Mathf.Lerp(currentYOffset, desiredY, verticalFollowSpeed * Time.fixedDeltaTime);
+
+        Vector3 desiredPosition = new Vector3(
+            player.position.x + targetXOffset,
+            currentYOffset,
+            player.position.z + baseOffset.z
+        );
+
+        // Movimiento más suave con aceleración
+        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, 0.1f);
+
+        transform.eulerAngles = initialRotation;
+    }
+
+
 }

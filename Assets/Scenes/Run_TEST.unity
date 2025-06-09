@@ -153,7 +153,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabs:
   - {fileID: 2412090497525926524, guid: 58cfd1ef6252da64aaac870ff4fa9277, type: 3}
-  - {fileID: 2412090497525926524, guid: 01b0e4adf86f0da4dac6fbe4002162b3, type: 3}
   minGroupSize: 3
   maxGroupSize: 6
   poolSize: 10
@@ -1225,7 +1224,7 @@ Transform:
   m_GameObject: {fileID: 1106885526}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -9.71}
+  m_LocalPosition: {x: 0, y: 0.37, z: -9.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5352,6 +5351,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3441732910309080112, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284554581503006494, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284554581503006494, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
+        type: 3}
+      propertyPath: m_Interpolate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8284554581503006494, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
+        type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8895674044648163451, guid: cdb63557c4cbb824bbcb7b9e5d961b92,
         type: 3}

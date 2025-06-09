@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 1890378717847456873}
   - component: {fileID: 3284288480671073228}
   - component: {fileID: 752336094164317958}
-  - component: {fileID: 5125687487598213791}
+  - component: {fileID: 1343240301474200861}
   m_Layer: 6
   m_Name: railing_straight_single_red
   m_TagString: Obstacle
@@ -199,8 +199,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5125687487598213791
-MeshCollider:
+--- !u!65 &1343240301474200861
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -217,10 +217,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 9144855638252798837, guid: e21a94a45de775c4fb806a2ea2e74a8b, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2, y: 0.21231636, z: 0.39999998}
+  m_Center: {x: 0.00000079472863, y: 1.0938438, z: -0.80000293}
 --- !u!1 &1738488509987083736
 GameObject:
   m_ObjectHideFlags: 0
@@ -231,6 +230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6267840261455487650}
   - component: {fileID: 2093012353473694379}
+  - component: {fileID: 1576425454582391204}
   m_Layer: 8
   m_Name: WallCollider
   m_TagString: Untagged
@@ -275,6 +275,33 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -774996925643388282, guid: a1db2abac96be7541b15b3e53ddd5ca4, type: 3}
+--- !u!54 &1576425454582391204
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1738488509987083736}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 1
 --- !u!1 &1950573293511345791
 GameObject:
   m_ObjectHideFlags: 0
@@ -555,7 +582,8 @@ GameObject:
   - component: {fileID: 830792579359974978}
   - component: {fileID: 3438884568921797584}
   - component: {fileID: 1521349052713219120}
-  - component: {fileID: 5764454928531301995}
+  - component: {fileID: 6735180306734976304}
+  - component: {fileID: 1687681550262244242}
   m_Layer: 6
   m_Name: railing_straight_single_red (1)
   m_TagString: Obstacle
@@ -628,8 +656,35 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &5764454928531301995
-MeshCollider:
+--- !u!54 &6735180306734976304
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5913356150371584726}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 1
+--- !u!65 &1687681550262244242
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -646,10 +701,9 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 9144855638252798837, guid: e21a94a45de775c4fb806a2ea2e74a8b, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 2, y: 0.18920693, z: 0.39999998}
+  m_Center: {x: 0.00000079472863, y: 1.1053995, z: -0.8000039}
 --- !u!1 &6033588763909432996
 GameObject:
   m_ObjectHideFlags: 0
@@ -770,7 +824,7 @@ Transform:
   m_GameObject: {fileID: 8805909018266599900}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.994, y: 3.429, z: -0.4844}
+  m_LocalPosition: {x: 1.994, y: 3.455, z: -0.4874}
   m_LocalScale: {x: 0.16, y: 1, z: 0.033333335}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -842,7 +896,7 @@ BoxCollider:
     m_Bits: 0
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 6, y: 1.000001, z: 6}

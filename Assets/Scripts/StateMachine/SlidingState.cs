@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SlidingState : State
@@ -39,7 +40,8 @@ public class SlidingState : State
             // Si el desplazamiento en el eje Y es mayor que en el eje X, es un swipe vertical
             if (Mathf.Abs(swipeVector.y) > Mathf.Abs(swipeVector.x)) {
                 // Detectar si es un swipe hacia arriba y el personaje no está saltando 
-                if (swipeVector.y > sc._swipeThreshold && sc.GetComponent<Rigidbody>().velocity.y == 0) {
+                if (swipeVector.y > sc._swipeThreshold && sc.isGrounded)
+                {
                     sc.ChangeState(sc.jumpingState);
                 }
             }

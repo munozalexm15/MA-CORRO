@@ -19,7 +19,7 @@ public class MoveTowardsPlayer : MonoBehaviour
         if (canMove)
         {
             //GetComponent<Rigidbody>().MovePosition(Vector3.back * speed * Time.deltaTime);
-            transform.position += Vector3.back * speed * Time.deltaTime; // Moverse hacia el jugador
+            transform.position += Vector3.back * speed * Time.fixedDeltaTime; // Moverse hacia el jugador
         }
     }
 }

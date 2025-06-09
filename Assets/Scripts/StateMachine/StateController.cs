@@ -67,9 +67,12 @@ public class StateController : MonoBehaviour
     public Vector3 originalSize;
     public Vector3 originalCenter;
 
+    private Rigidbody rb;
+
 
     private void Start()
     {
+        rb = GetComponent<Rigidbody>();
         playerCollider = GetComponent<BoxCollider>();
         originalCenter = playerCollider.center;
         originalSize = playerCollider.size;
@@ -91,14 +94,6 @@ public class StateController : MonoBehaviour
         {
             return;
         }
-         if (IsChangingLane)
-        {
-            isRotating = true;
-            MoveToLane();
-        }
-        if (isRotating) {
-            RotatePlayer();
-        }
     }
 
     void FixedUpdate()
@@ -110,6 +105,14 @@ public class StateController : MonoBehaviour
                 return;
             }
             currentState.OnStateFixedUpdate();
+        }
+        if (IsChangingLane)
+        {
+            isRotating = true;
+            MoveToLane();
+        }
+        if (isRotating) {
+            RotatePlayer();
         }
     }
 
@@ -145,29 +148,28 @@ public class StateController : MonoBehaviour
         if (direction != Vector3.zero)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 20);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * 20);
         }
     }
 
     public void MoveToLane() {
         // Clonar la posición del target pero con el mismo Y que el personaje
-        Vector3 targetPosition = new Vector3(currentLane.GetComponent<Transform>().position.x, transform.position.y, transform.position.z);
-
+        Vector3 targetPosition = new Vector3(currentLane.transform.position.x, rb.position.y, rb.position.z);
         // Calcular la distancia ignorando diferencias en Y
-        float distance = Vector3.Distance(new Vector3(transform.position.x, 0f, transform.position.z), new Vector3(targetPosition.x, 0f, transform.position.z));
+        float distance = Vector3.Distance(new Vector3(rb.position.x, 0f, rb.position.z), new Vector3(targetPosition.x, 0f, rb.position.z));
 
-        if (distance > 0.2f) // Aumenta el umbral para evitar movimientos innecesarios
+        if (distance > 0.2f)
         {
-            // Moverse solo en el eje X sin cambiar la altura (Y) ni Z
-            Vector3 direction = (targetPosition - transform.position).normalized;
-            direction.y = 0;  // Evitar cualquier movimiento vertical
-            direction.z = 0;  // Evitar cualquier movimiento en Z
-            transform.position += direction * 15 * Time.deltaTime;
+            Vector3 direction = (targetPosition - rb.position).normalized;
+            direction.y = 0;
+            direction.z = 0;
+            rb.MovePosition(rb.position + direction * 15 * Time.fixedDeltaTime);
         }
-        else {
-            // Asegurarse de que la posición esté exactamente en la del objetivo
-            transform.position = new Vector3(targetPosition.x, transform.position.y, transform.position.z);
+        else
+        {
+            rb.MovePosition(new Vector3(targetPosition.x, rb.position.y, rb.position.z));
             IsChangingLane = false;
+            Debug.Log("quietecito");
         }
     }
 

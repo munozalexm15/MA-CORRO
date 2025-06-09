@@ -20,18 +20,26 @@ public class RunningState : State
     protected override void OnUpdate()
     {
         CheckForInput();
-
-        if (!sc.isGrounded)
-        {
-            sc.ChangeState(sc.fallingState);
-        }
-
-
-        //throw new System.NotImplementedException();
     }
 
     protected override void OnFixedUpdate()
     {
+
+        Rigidbody rb = sc.GetComponent<Rigidbody>();
+
+        if (!sc.isGrounded)
+        {
+            if (rb.velocity.y > 0)
+            {
+                sc.ChangeState(sc.jumpingState);
+            }
+            else if (rb.velocity.y < 0)
+            {
+                sc.ChangeState(sc.fallingState);
+            }
+}
+        //throw new System.NotImplementedException();
+
         float RunBlendProgress = sc.animHandler.GetFloat("RunBlendProgress");
         float SpeedMultiplier = sc.animHandler.GetFloat("SpeedMultiplier");
         if (RunBlendProgress < 1)
