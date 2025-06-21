@@ -16,21 +16,24 @@ public class TileTrigger : MonoBehaviour
         {
             objectPool.ReturnObject(gameObject, true);
 
-           
-            
             if (!objectPool.activeObjects.Contains(gameObject))
             {
                 objectPool.activeObjects.Remove(gameObject);
             }
-            
+
             // Obtener un objeto del pool
             GameObject obj = objectPool.GetObject();
-            
+
             if (obj != null)
             {
                 // Activar el movimiento hacia el jugador
                 obj.GetComponent<MoveTowardsPlayer>().enabled = true;
             }
         }
+    }
+
+    void FixedUpdate()
+    {
+        GetComponent<MoveTowardsPlayer>().speed = objectPool.platformsSpeed;
     }
 }

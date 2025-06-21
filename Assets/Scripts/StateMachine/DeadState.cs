@@ -13,6 +13,7 @@ public class DefeatedState : State
         sc.isRotating = false;
         sc.GetComponent<Rigidbody>().velocity = Vector3.zero;
         sc.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+        sc.transform.GetComponent<CharacterVFXManager>().HitVFX.Play();
         ShakeCameras();
     }
 

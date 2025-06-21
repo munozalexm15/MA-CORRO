@@ -106,7 +106,6 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms:
-    - Android
     - iPhone
     - WebGL
   - serializedVersion: 3
@@ -159,12 +158,11 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms:
-    - Android
     - iPhone
     - WebGL
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
-    Android: 0
+    Android: 2
     CloudRendering: 2
     GameCoreScarlett: 2
     GameCoreXboxOne: 2

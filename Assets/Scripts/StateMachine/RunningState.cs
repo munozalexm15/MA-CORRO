@@ -9,7 +9,12 @@ public class RunningState : State
 {
     protected override void OnEnter()
     {
+        Debug.Log(sc.GetComponent<Rigidbody>().velocity + " " + sc.previousState);
         //throw new System.NotImplementedException();
+        if (sc.previousState == sc.fallingState && sc.GetComponent<Rigidbody>().velocity.y <= -12)
+        {
+            sc.transform.GetComponent<CharacterVFXManager>().GroundPoundVFX.Play();
+        }
     }
 
     protected override void OnExit()
@@ -46,6 +51,7 @@ public class RunningState : State
         {
             sc.animHandler.SetFloat("SpeedMultiplier", SpeedMultiplier + 0.00003f);
             sc.animHandler.SetFloat("RunBlendProgress", RunBlendProgress + 0.0001f);
+            sc.objPoolManager.UpdatePlatformSpeed(0.002f);
         }
 
     }

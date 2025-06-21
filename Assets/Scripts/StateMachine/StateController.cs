@@ -69,9 +69,8 @@ public class StateController : MonoBehaviour
 
     private Rigidbody rb;
 
-    public float maxLaneChangeDuration = 0.5f; // segundos
+    public float maxLaneChangeDuration = 2f; // segundos
     private float laneChangeTimer = 0f;
-
 
     private void Start()
     {
@@ -104,7 +103,6 @@ public class StateController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(rb.velocity);
         if (currentState != null)
         {
             if (currentState == defeatedState)
@@ -129,6 +127,7 @@ public class StateController : MonoBehaviour
         {
             currentState.OnStateExit();
         };
+        previousState = currentState;
         currentState = newState;
         currentState.OnStateEnter(this);
     }
@@ -140,6 +139,7 @@ public class StateController : MonoBehaviour
             ChangeState(fallingState);
         }
         else {
+            
             ChangeState(runningState);
         }
     }
@@ -149,11 +149,14 @@ public class StateController : MonoBehaviour
         Vector3 targetLookAt = new Vector3(currentLane.transform.position.x, transform.position.y, currentLane.transform.position.z + 1f);
         Vector3 direction = targetLookAt - transform.position;
         direction.y = 0;
-
-        if (direction.sqrMagnitude > 0.001f)
+        if (direction.sqrMagnitude > 1.4f)
         {
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * 10f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.fixedDeltaTime * 20f);
+        }
+        else
+        {
+            isRotating = false;
         }
     }
 
@@ -168,12 +171,12 @@ public class StateController : MonoBehaviour
         float targetX = currentLane.transform.position.x;
         float deltaX = targetX - rb.position.x;
 
-        if (Mathf.Abs(deltaX) > 0.1f)
+        if (Mathf.Abs(deltaX) > 0.14f)
         {
             float direction = Mathf.Sign(deltaX);
 
             Vector3 newVelocity = rb.velocity;
-            newVelocity.x = direction * 10f; // brusco y rápido
+            newVelocity.x = direction * 14f; // brusco y rápido
             rb.velocity = newVelocity;
         }
         else
@@ -186,6 +189,7 @@ public class StateController : MonoBehaviour
             rb.velocity = newVelocity;
 
             IsChangingLane = false;
+            isRotating = false;
         }
     }
 
@@ -231,8 +235,4 @@ public class StateController : MonoBehaviour
             // Opcional: anular efectos, rebote, etc.
         }
     }
-
-
-    
-    
 }

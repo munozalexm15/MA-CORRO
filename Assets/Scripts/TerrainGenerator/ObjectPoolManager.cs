@@ -19,6 +19,8 @@ public class ObjectPool : MonoBehaviour
 
     private Transform lastExitPoint;
 
+    public float platformsSpeed = 8f;
+
 
     void Start()
     {
@@ -60,58 +62,59 @@ public class ObjectPool : MonoBehaviour
     }
 
     public GameObject GetObject()
-{
-    // Ver si cambiamos de tipo
-    if (tilesRemainingInGroup <= 0)
     {
-        currentType = GetRandomTileType();
-        tilesRemainingInGroup = Random.Range(minGroupSize, maxGroupSize + 1);
-    }
-
-    GameObject obj = null;
-
-    // Buscar uno en la pool que sea del tipo actual
-    foreach (GameObject pooled in objectPool)
-    {
-        TileMetadata meta = pooled.GetComponent<TileMetadata>();
-        if (meta != null && meta.tileType == currentType)
+        // Ver si cambiamos de tipo
+        if (tilesRemainingInGroup <= 0)
         {
-            obj = pooled;
-            break;
+            currentType = GetRandomTileType();
+            tilesRemainingInGroup = Random.Range(minGroupSize, maxGroupSize + 1);
         }
-    }
 
-    if (obj != null)
-    {
-        objectPool = new Queue<GameObject>(objectPool.Where(item => item != obj));
-    }
-    else
-    {
-        // Instanciar uno nuevo del tipo actual
-        GameObject prefabToInstantiate = GetRandomPrefabOfType(currentType);
-        obj = Instantiate(prefabToInstantiate);
-        obj.GetComponent<TileTrigger>().objectPool = this;
-    }
+        GameObject obj = null;
 
-    obj.SetActive(true);
-
-    // 👉 Posicionamiento:
-    if (lastExitPoint == null)
-    {
-        // Primer tile: alinear con StartPoint
-        Transform startPoint = obj.transform.Find("StartPoint");
-        if (startPoint != null)
+        // Buscar uno en la pool que sea del tipo actual
+        foreach (GameObject pooled in objectPool)
         {
-            Vector3 offset = obj.transform.position - startPoint.position;
-            obj.transform.position = transform.position + offset;
+            TileMetadata meta = pooled.GetComponent<TileMetadata>();
+            if (meta != null && meta.tileType == currentType)
+            {
+                obj = pooled;
+                break;
+            }
+        }
+
+        if (obj != null)
+        {
+            objectPool = new Queue<GameObject>(objectPool.Where(item => item != obj));
         }
         else
         {
-            obj.transform.position = transform.position;
+            // Instanciar uno nuevo del tipo actual
+            GameObject prefabToInstantiate = GetRandomPrefabOfType(currentType);
+            obj = Instantiate(prefabToInstantiate);
+            obj.GetComponent<TileTrigger>().objectPool = this;
         }
-    }
-    
-    else
+
+        obj.SetActive(true);
+       
+
+        // 👉 Posicionamiento:
+        if (lastExitPoint == null)
+        {
+            // Primer tile: alinear con StartPoint
+            Transform startPoint = obj.transform.Find("StartPoint");
+            if (startPoint != null)
+            {
+                Vector3 offset = obj.transform.position - startPoint.position;
+                obj.transform.position = transform.position + offset;
+            }
+            else
+            {
+                obj.transform.position = transform.position;
+            }
+        }
+
+        else
         {
             Transform startPoint = obj.transform.Find("StartPoint");
             if (startPoint != null)
@@ -126,20 +129,19 @@ public class ObjectPool : MonoBehaviour
         }
 
 
-    // 👉 Actualizar lastExitPoint para el próximo tile
-    Transform nextPoint = obj.transform.Find("NextSpawnPoint");
-    if (nextPoint != null)
-    {
-        lastExitPoint = nextPoint;
+        // 👉 Actualizar lastExitPoint para el próximo tile
+        Transform nextPoint = obj.transform.Find("NextSpawnPoint");
+        if (nextPoint != null)
+        {
+            lastExitPoint = nextPoint;
+        }
+
+        if (!activeObjects.Contains(obj))
+            activeObjects.Add(obj);
+
+        tilesRemainingInGroup--;
+        return obj;
     }
-
-    if (!activeObjects.Contains(obj))
-        activeObjects.Add(obj);
-
-    tilesRemainingInGroup--;
-
-    return obj;
-}
 
     private TileMetadata.TileType GetRandomTileType()
     {
@@ -165,16 +167,18 @@ public class ObjectPool : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        if (isDestroyed) {
+        if (isDestroyed)
+        {
             Destroy(obj);
         }
 
-        else {
+        else
+        {
             obj.SetActive(false);
             obj.GetComponent<MoveTowardsPlayer>().enabled = false;
             objectPool.Enqueue(obj);
         }
-       
+
     }
 
     // Método que consulta la lista de objetos activos y los detiene
@@ -193,18 +197,33 @@ public class ObjectPool : MonoBehaviour
             }
         }
     }
-    
+
     // Método que reactiva los objetos activos del mapa
-public void ContinueMap()
-{
-    foreach (GameObject obj in activeObjects)
+    public void ContinueMap()
     {
-        MoveTowardsPlayer mover = obj.GetComponent<MoveTowardsPlayer>();
-        if (mover != null)
+        foreach (GameObject obj in activeObjects)
         {
-            mover.canMove = true;
+            MoveTowardsPlayer mover = obj.GetComponent<MoveTowardsPlayer>();
+            if (mover != null)
+            {
+                mover.canMove = true;
+            }
         }
     }
-}
+
+    public void UpdatePlatformSpeed(float newSpeed)
+    {
+        platformsSpeed += newSpeed;
+        foreach (GameObject obj in activeObjects)
+        {
+            if (!obj) continue;
+
+            MoveTowardsPlayer mover = obj.GetComponent<MoveTowardsPlayer>();
+            if (mover != null)
+            {
+                mover.speed = platformsSpeed;
+            }
+        }
+    }
 
 }

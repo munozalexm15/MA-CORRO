@@ -57,7 +57,7 @@ MonoBehaviour:
   m_SoftShadowsSupported: 1
   m_ConservativeEnclosingSphere: 0
   m_NumIterationsEnclosingSphere: 64
-  m_SoftShadowQuality: 2
+  m_SoftShadowQuality: 1
   m_AdditionalLightsCookieResolution: 2048
   m_AdditionalLightsCookieFormat: 3
   m_UseSRPBatcher: 1
@@ -104,9 +104,9 @@ MonoBehaviour:
   m_PrefilterDBufferMRT1: 1
   m_PrefilterDBufferMRT2: 1
   m_PrefilterDBufferMRT3: 1
-  m_PrefilterSoftShadowsQualityLow: 0
-  m_PrefilterSoftShadowsQualityMedium: 0
-  m_PrefilterSoftShadowsQualityHigh: 0
+  m_PrefilterSoftShadowsQualityLow: 1
+  m_PrefilterSoftShadowsQualityMedium: 1
+  m_PrefilterSoftShadowsQualityHigh: 1
   m_PrefilterSoftShadows: 0
   m_PrefilterScreenCoord: 1
   m_PrefilterNativeRenderPass: 1

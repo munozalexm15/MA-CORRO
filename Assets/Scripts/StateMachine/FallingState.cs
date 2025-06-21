@@ -48,8 +48,8 @@ public class FallingState : State
                 // Detectar si es un swipe vertical (arriba o abajo)
                 if (swipeVector.y < -sc._swipeThreshold)
                 {
-                    Physics.gravity = new Vector3(0, -30.0F, 0);
-                    sc.ChangeState(sc.slidingState);
+                    //Physics.gravity = new Vector3(0, -30.0F, 0);
+                    sc.GetComponent<Rigidbody>().velocity = Vector3.up * -9;
                 }
             }
             // Si el desplazamiento en el eje X es mayor, es un swipe horizontal (cambiar de carril)
