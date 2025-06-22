@@ -8,6 +8,7 @@ TagManager:
   - Obstacle
   - Lane
   - Slope
+  - Coin
   layers:
   - Default
   - TransparentFX

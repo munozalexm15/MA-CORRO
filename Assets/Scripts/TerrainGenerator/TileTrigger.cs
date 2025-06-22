@@ -3,10 +3,11 @@ using UnityEngine;
 public class TileTrigger : MonoBehaviour
 {
     public ObjectPool objectPool;
+    public GameObject coinGOContainer;
 
     private void Start()
     {
-
+        coinGOContainer = transform.Find("CoinsContainer").gameObject;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -14,6 +15,14 @@ public class TileTrigger : MonoBehaviour
         // Cuando el jugador pasa por el trigger, devolvemos el objeto al pool
         if (other.CompareTag("Player"))
         {
+            if (coinGOContainer)
+            {
+                foreach (Transform child in coinGOContainer.transform)
+                {
+                    child.gameObject.SetActive(true);
+                }
+            }
+
             objectPool.ReturnObject(gameObject, true);
 
             if (!objectPool.activeObjects.Contains(gameObject))

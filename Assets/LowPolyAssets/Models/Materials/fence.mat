@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: fence
-  m_Shader: {fileID: -6465566751694194690, guid: 7ed9f707be3942748a3e3368423b7945,
+  m_Shader: {fileID: -6465566751694194690, guid: c70a775b855aed04abd62d5c562e0792,
     type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -46,7 +46,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Backwards_Strenght: 0
+    - _Backwards_Strenght: -0.002
     - _CurveAmount: 0.005
     - _CurveDistance: 50
     - _Cutoff: 0.23134328
@@ -55,6 +55,7 @@ Material:
     - _Sideways_Strenght: 0
     - _Tile_Strenght_X: 1
     - _Tile_Strenght_Y: 1
+    - _isTransparent: 1
     m_Colors:
     - _Color: {r: 0.588, g: 0.588, b: 0.588, a: 1}
   m_BuildTextureStacks: []

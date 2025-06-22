@@ -10,7 +10,10 @@ Material:
   m_Name: cfxr stretch ray blur add
   m_Shader: {fileID: -6465566751694194690, guid: 1a29b4d27eb8b04479ef89c00dea533d,
     type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
+  - _ALPHATEST_ON
   - _CFXR_ADDITIVE
   - _FADING_ON
   m_InvalidKeywords:
@@ -19,12 +22,14 @@ Material:
   - _CFXR_OVERLAYBLEND_RGBA
   - _CFXR_OVERLAYTEX_OFF
   - _CFXR_SINGLE_CHANNEL
+  - _SINGLECHANNEL_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -94,7 +99,7 @@ Material:
     - _SoftParticlesFadeDistanceNear: 0
     - _SrcBlend: 5
     - _UVDistortionAdd: 0
-    - _UseAlphaClip: 0
+    - _UseAlphaClip: 1
     - _UseBackLighting: 0
     - _UseDissolve: 0
     - _UseDissolveOffsetUV: 0
@@ -110,7 +115,7 @@ Material:
     - _UseSecondColor: 0
     - _UseUV2Distortion: 0
     - _UseUVDistortion: 0
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - _Color: {r: 2, g: 2, b: 2, a: 0}
     - _DissolveScroll: {r: 0, g: 0, b: 0, a: 0}

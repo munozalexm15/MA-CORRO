@@ -2,15 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterVFXManager : MonoBehaviour
+public class CoinBehavior : MonoBehaviour
 {
     // Start is called before the first frame update
-    [Header("VFX In scene references")]
-    public ParticleSystem GroundPoundVFX;
-    public ParticleSystem HitVFX;
-
-    public ParticleSystem coinVFX;
-
     void Start()
     {
 
@@ -24,9 +18,9 @@ public class CharacterVFXManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Coin"))
+        if (other.CompareTag("Player"))
         {
-            coinVFX.Play();
+            gameObject.SetActive(false);
         }
     }
 }
