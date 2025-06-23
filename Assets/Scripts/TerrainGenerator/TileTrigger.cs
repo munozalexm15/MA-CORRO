@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class TileTrigger : MonoBehaviour
@@ -12,6 +13,11 @@ public class TileTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (GetComponent<TileMetadata>().destroyOnComplete)
+        {
+            StartCoroutine(DelayedReturn(1f)); //Espera de 1 segundo
+            return;
+        }
         // Cuando el jugador pasa por el trigger, devolvemos el objeto al pool
         if (other.CompareTag("Player"))
         {
@@ -23,7 +29,7 @@ public class TileTrigger : MonoBehaviour
                 }
             }
 
-            objectPool.ReturnObject(gameObject, true);
+            objectPool.ReturnObject(gameObject, false);
 
             if (!objectPool.activeObjects.Contains(gameObject))
             {
@@ -44,5 +50,12 @@ public class TileTrigger : MonoBehaviour
     void FixedUpdate()
     {
         GetComponent<MoveTowardsPlayer>().speed = objectPool.platformsSpeed;
+    }
+
+    private IEnumerator DelayedReturn(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(this.gameObject);
+
     }
 }

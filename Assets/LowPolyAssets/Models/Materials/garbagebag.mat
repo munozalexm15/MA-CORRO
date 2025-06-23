@@ -59,7 +59,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Backwards_Strenght: 0
+    - _Backwards_Strenght: -0.002
     - _CurveAmount: 0.005
     - _CurveDistance: 50
     - _QueueControl: 0
@@ -67,6 +67,7 @@ Material:
     - _Sideways_Strenght: 0
     - _Tile_Strenght_X: 1
     - _Tile_Strenght_Y: 1
+    - _isTransparent: 0
     m_Colors:
     - _Color: {r: 0.588, g: 0.588, b: 0.588, a: 1}
   m_BuildTextureStacks: []

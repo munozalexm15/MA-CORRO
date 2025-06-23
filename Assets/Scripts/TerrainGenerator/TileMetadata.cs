@@ -11,6 +11,9 @@ public class TileMetadata : MonoBehaviour
         Obstacle,
         // agrega más si quieres
     }
+
+    public bool destroyOnComplete;
+
     public TileType tileType;
 
     #if UNITY_EDITOR

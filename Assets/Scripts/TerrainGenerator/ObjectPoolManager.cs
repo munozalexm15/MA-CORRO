@@ -55,7 +55,7 @@ public class ObjectPool : MonoBehaviour
         // Activar uno de prueba
         //GameObject activeObj = GetObject();
 
-        int initialTiles = 5; // o el número que quieras precargar
+        int initialTiles = 6; // o el número que quieras precargar
         for (int i = 0; i < initialTiles; i++)
         {
             GetObject();
@@ -162,7 +162,7 @@ public class ObjectPool : MonoBehaviour
     // Método para devolver un objeto a la pool
     public void ReturnObject(GameObject obj, bool isDestroyed = false)
     {
-        StartCoroutine(DelayedReturn(obj, 1f, true)); // Espera de 1 segundo
+        StartCoroutine(DelayedReturn(obj, 1f, isDestroyed)); // Espera de 1 segundo
     }
 
     private IEnumerator DelayedReturn(GameObject obj, float delay, bool isDestroyed = false)
