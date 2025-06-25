@@ -84,7 +84,7 @@ public class StateController : MonoBehaviour
         originalSize = playerCollider.size;
         Physics.gravity = new Vector3(0, -15.0F, 0);
         animHandler = GetComponent<Animator>();
-        ChangeState(runningState);
+        
     }
 
     void Update()

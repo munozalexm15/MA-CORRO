@@ -12,7 +12,6 @@ public class MoveTowardsPlayer : MonoBehaviour
     {
         speed = initialSpeed;
         canMove = false;
-        Debug.Log("Por la puta cara");
     }
 
     private void FixedUpdate()

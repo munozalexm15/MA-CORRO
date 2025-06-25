@@ -17,19 +17,22 @@ public class CameraController : MonoBehaviour
     private Vector3 initialRotation;
     private Vector3 velocity = Vector3.zero;
 
-    public Shader cameraShader;
+    public bool canMove;
 
     void Start()
     {
-        GetComponent<Camera>().SetReplacementShader(cameraShader, "RenderType");
-        transform.position = playerRigidbody.position + baseOffset;
+        //transform.position = playerRigidbody.position + baseOffset;
         currentYOffset = baseOffset.y;
         initialRotation = transform.eulerAngles;
     }
 
     void LateUpdate() // ← ¡Movemos la cámara en LateUpdate ahora!
     {
-        UpdateCamera();
+        if (canMove)
+        {
+            UpdateCamera();
+        }
+        
     }
 
     public void ChangeLane(int laneIndex)
@@ -63,6 +66,6 @@ public class CameraController : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, 0.1f);
 
         // Fijar rotación si lo deseas
-        transform.eulerAngles = initialRotation;
+        //transform.eulerAngles = initialRotation;
     }
 }
