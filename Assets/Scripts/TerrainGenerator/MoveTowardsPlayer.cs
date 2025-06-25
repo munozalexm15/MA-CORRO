@@ -6,20 +6,20 @@ public class MoveTowardsPlayer : MonoBehaviour
     private float initialSpeed = 8f;
     public float speed; // Velocidad de movimiento
 
-    public bool canMove = true;
+    public bool canMove;
 
-    private void Start()
+    private void Awake()
     {
-        // Asumimos que el jugador tiene la etiqueta "Player"
         speed = initialSpeed;
+        canMove = false;
+        Debug.Log("Por la puta cara");
     }
 
     private void FixedUpdate()
     {
         if (canMove)
         {
-            //GetComponent<Rigidbody>().MovePosition(Vector3.back * speed * Time.deltaTime);
-            transform.position += Vector3.back * speed * Time.fixedDeltaTime; // Moverse hacia el jugador
+            transform.position += Vector3.back * speed * Time.fixedDeltaTime;
         }
     }
 }

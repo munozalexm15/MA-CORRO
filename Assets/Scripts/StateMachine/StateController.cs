@@ -74,6 +74,7 @@ public class StateController : MonoBehaviour
 
     private void Start()
     {
+        animHandler.Play("Idle");
         rb = GetComponent<Rigidbody>();
         rb.interpolation = RigidbodyInterpolation.Interpolate;
         cameraController.playerRigidbody = rb;

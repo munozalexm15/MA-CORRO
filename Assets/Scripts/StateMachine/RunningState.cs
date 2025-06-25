@@ -9,9 +9,8 @@ public class RunningState : State
 {
     protected override void OnEnter()
     {
-        Debug.Log(sc.GetComponent<Rigidbody>().velocity + " " + sc.previousState);
         //throw new System.NotImplementedException();
-        if (sc.previousState == sc.fallingState && sc.GetComponent<Rigidbody>().velocity.y <= -12)
+        if (sc.previousState == sc.fallingState && sc.GetComponent<Rigidbody>().velocity.y <= -8)
         {
             sc.transform.GetComponent<CharacterVFXManager>().GroundPoundVFX.Play();
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class CoinBehavior : MonoBehaviour
@@ -14,6 +15,11 @@ public class CoinBehavior : MonoBehaviour
     void Update()
     {
 
+    }
+
+    void FixedUpdate()
+    {
+        transform.Rotate(new Vector3(0,0,-1)); 
     }
 
     void OnTriggerEnter(Collider other)

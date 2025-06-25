@@ -13,9 +13,9 @@ public class ObjectPool : MonoBehaviour
     private int tilesRemainingInGroup = 0;
     public int minGroupSize = 3;
     public int maxGroupSize = 6;
-
+    [HideInInspector]
     public int poolSize = 10; // Número de objetos en la pool
-    private Queue<GameObject> objectPool = new Queue<GameObject>(); // Cola de objetos disponibles
+    public Queue<GameObject> objectPool = new Queue<GameObject>(); // Cola de objetos disponibles
     public List<GameObject> activeObjects = new List<GameObject>(); // Lista de objetos activos
 
     private Transform lastExitPoint;
@@ -97,7 +97,7 @@ public class ObjectPool : MonoBehaviour
         }
 
         obj.SetActive(true);
-       
+
 
         // 👉 Posicionamiento:
         if (lastExitPoint == null)
@@ -227,5 +227,4 @@ public class ObjectPool : MonoBehaviour
             }
         }
     }
-
 }
