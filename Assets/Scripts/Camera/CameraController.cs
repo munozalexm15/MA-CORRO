@@ -2,70 +2,108 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Rigidbody playerRigidbody; // ← Ahora seguimos el Rigidbody, no el Transform
+    [Header("Referencias")]
+    public Rigidbody playerRigidbody;                    // Seguimos al Rigidbody
 
-    public Vector3 baseOffset = new Vector3(0, 5, -10);
+    [Header("Offsets de Posición")]
+    public Vector3 baseOffset = new(0, 5, -10);
     public float verticalFollowSpeed = 5f;
 
     [Header("Lane Offset Settings")]
-    public float leftOffset = -1f;
+    public float leftOffset   = -1f;
     public float centerOffset = 0f;
-    public float rightOffset = 1f;
+    public float rightOffset  = 1f;
 
-    private float targetXOffset = 0f;
-    private float currentYOffset = 0f;
-    private Vector3 initialRotation;
+    private float  targetXOffset = 0f;
+    private float  currentYOffset;
     private Vector3 velocity = Vector3.zero;
 
+    [Header("Transición de rotación al iniciar")]        // ★ NUEVO
+    [SerializeField] float lookUpInit      = 1.5f;       // cuánto más arriba mira
+    [SerializeField] public float startupLerpTime = 0.35f;      // duración de la suavización
+
+    Quaternion rotIni;          // rotación que tiene la cámara en el editor   ★ NUEVO
+    float      tweenT;          // progreso 0‑1 de la interpolación            ★ NUEVO
+    bool       tweening;        // ¿seguimos interpolando?                     ★ NUEVO
+
     public bool canMove;
+    [Header("Ajustes de rotación")]
+    public bool rotationEnabled = true;
+    
+
+    /* ───────────────────────────────────────────────────────── */
 
     void Start()
     {
-        //transform.position = playerRigidbody.position + baseOffset;
         currentYOffset = baseOffset.y;
-        initialRotation = transform.eulerAngles;
+
+        // guardamos la rotación de arranque tal cual la ves en la escena  ★ NUEVO
+        rotIni   = transform.rotation;
+        tweenT   = 0f;
+        tweening = true;
     }
 
-    void LateUpdate() // ← ¡Movemos la cámara en LateUpdate ahora!
+    void LateUpdate()
     {
-        if (canMove)
+        /* ── ROTACIÓN ─────────────────────────────────────────────── */
+        if (playerRigidbody && rotationEnabled)   // ← ¡sólo si está activada!
         {
-            UpdateCamera();
+            Vector3 lookTarget = playerRigidbody.position + Vector3.up * lookUpInit;
+            Quaternion rotTarget =
+                Quaternion.LookRotation(lookTarget - transform.position, Vector3.up);
+
+            if (tweening)
+            {
+                tweenT += Time.deltaTime / startupLerpTime;
+                transform.rotation = Quaternion.Slerp(rotIni, rotTarget, tweenT);
+
+                if (tweenT >= 1f)
+                {
+                    tweening = false;
+                    transform.rotation = rotTarget;
+                }
+            }
+            else
+            {
+                transform.rotation = rotTarget;
+            }
         }
-        
+        /* Si rotationEnabled == false no tocamos la rotación actual */
+
+        /* ── POSICIÓN ─────────────────────────────────────────────── */
+        if (canMove && playerRigidbody)
+            UpdateCamera();
     }
+
+    /* ───────────────────────────────────────────────────────── */
 
     public void ChangeLane(int laneIndex)
     {
-        if (laneIndex == -1)
-            targetXOffset = leftOffset;
-        else if (laneIndex == 0)
-            targetXOffset = centerOffset;
-        else if (laneIndex == 1)
-            targetXOffset = rightOffset;
+        targetXOffset = laneIndex switch          // sintaxis compacta C# 8+
+        {
+            -1 => leftOffset,
+            0  => centerOffset,
+            1  => rightOffset,
+            _  => targetXOffset
+        };
 
-        velocity = Vector3.zero; // Resetea la velocidad para evitar tirones bruscos
+        velocity = Vector3.zero; // evita tirones bruscos
     }
 
     void UpdateCamera()
     {
-        if (!playerRigidbody) return;
-
-        // Y sigue suavemente
+        // Y (altura) sigue suavemente
         float desiredY = playerRigidbody.position.y + baseOffset.y;
         currentYOffset = Mathf.Lerp(currentYOffset, desiredY, verticalFollowSpeed * Time.deltaTime);
 
-        // Calcula la nueva posición deseada de la cámara
-        Vector3 desiredPosition = new Vector3(
+        // Posición deseada completa
+        Vector3 desiredPosition = new(
             playerRigidbody.position.x + targetXOffset,
             currentYOffset,
-            playerRigidbody.position.z + baseOffset.z
-        );
+            playerRigidbody.position.z + baseOffset.z);
 
         // Movimiento suave con SmoothDamp
-        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition, ref velocity, 0.1f);
-
-        // Fijar rotación si lo deseas
-        //transform.eulerAngles = initialRotation;
+        transform.position = Vector3.SmoothDamp(transform.position, desiredPosition,
+                                                ref velocity, 0.1f);
     }
 }

@@ -17,7 +17,10 @@ public class JumpingState : State
 
     protected override void OnUpdate()
     {
-        
+        if (!sc.canChangeLanes)
+        {
+            return;
+        }
         CheckForInput();
     }
 

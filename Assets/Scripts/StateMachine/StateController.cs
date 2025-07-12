@@ -38,6 +38,7 @@ public class StateController : MonoBehaviour
     public List<GameObject> lanes;
     public GameObject currentLane;
     public Transform PlayerParentTransform;
+    public bool canChangeLanes;
 
     //Camera control variables
     [Header("Camera Settings")]
@@ -74,6 +75,7 @@ public class StateController : MonoBehaviour
 
     private void Start()
     {
+        canChangeLanes = false;
         animHandler.Play("Idle");
         rb = GetComponent<Rigidbody>();
         rb.interpolation = RigidbodyInterpolation.Interpolate;
@@ -194,10 +196,8 @@ public class StateController : MonoBehaviour
         }
     }
 
-
-
-
     public void MoveCameraToLane() {
+        Debug.Log(currentLane.name);
         if (currentLane.name == "CentralLane")
         {
             cameraController.ChangeLane(0);

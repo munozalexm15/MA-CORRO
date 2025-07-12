@@ -23,6 +23,10 @@ public class RunningState : State
 
     protected override void OnUpdate()
     {
+        if (!sc.canChangeLanes)
+        {
+            return;
+        }
         CheckForInput();
     }
 
@@ -57,7 +61,6 @@ public class RunningState : State
 
     protected void CheckForInput()
     {
-
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
             sc.startTouchPos = Input.GetTouch(0).position;

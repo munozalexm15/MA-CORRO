@@ -24,6 +24,10 @@ public class SlidingState : State
 
     protected override void OnUpdate()
     {
+        if (!sc.canChangeLanes)
+        {
+            return;
+        }
         CheckForInput();
     }
 

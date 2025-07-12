@@ -9,7 +9,10 @@ public class GameManager : MonoBehaviour
 
     public ObjectPool objPool;
     public StateController stateController;
-    public Button UIButton;
+
+    public GameObject MainMenuUI;
+    private Button UIButton;
+
 
     [Header("Positions")]
     public Transform targetPos;
@@ -31,35 +34,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (isLerping)
-        {
-           elapsed += Time.deltaTime;
-            float t = Mathf.Clamp01(elapsed / duration);
-            cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, 57f, t);
-
-            // Lerp de posición
-            cam.transform.position = Vector3.Lerp(startPos, targetPos.position, t);
-
-            // Calcular rotación para mirar al jugador
-            if (PlayerPos != null)
-            {
-                Quaternion lookRot = Quaternion.LookRotation(PlayerPos.position -  cam.transform.position);
-                // Suavizamos la rotación hacia el jugador
-                cam.transform.rotation = Quaternion.Slerp( cam.transform.rotation, lookRot, Time.deltaTime * rotSmooth);
-            }
-
-            if (t >= 1f)
-            {
-                isLerping = false;
-                cam.GetComponent<CameraController>().canMove = true;
-            }
-        }
+        UIButton = MainMenuUI.transform.Find("RunButton").GetComponent<Button>();
     }
 
     public void StartRace()
@@ -88,10 +63,13 @@ public class GameManager : MonoBehaviour
 
         stateController.animHandler.CrossFade("Blend Tree", 0.05f, 0);
 
-        isLerping = true;
+        //isLerping = true;
         elapsed = 0f;
         startPos = currentPos.position;
         startRot = currentPos.rotation;
+        cam.GetComponent<CameraOrbit>().BeginOrbit();
         stateController.ChangeState(stateController.runningState);
+        MainMenuUI.transform.Find("Top").GetComponent<Animator>().Play("FadeOutTopAnim");
+        MainMenuUI.transform.Find("Bottom").GetComponent<Animator>().Play("FadeOutBottomAnim");
     }
 }
