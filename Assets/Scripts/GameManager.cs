@@ -11,7 +11,11 @@ public class GameManager : MonoBehaviour
     public StateController stateController;
 
     public GameObject MainMenuUI;
+    public GameObject OptionsUI;
     private Button UIButton;
+
+    private bool isSettingsOpen;
+    private Animator settingsAnimator;
 
 
     [Header("Positions")]
@@ -23,18 +27,18 @@ public class GameManager : MonoBehaviour
 
     [Header("Settings")]
     public float duration = 1.25f;
-    [Range(1f, 20f)]
-    public float rotSmooth = 10f;
-   
 
-    bool isLerping;
+    [Range(1f, 20f)] public float rotSmooth = 10f;
     float elapsed;
     Vector3 startPos;
     Quaternion startRot;
+    
     // Start is called before the first frame update
     void Start()
     {
-        UIButton = MainMenuUI.transform.Find("RunButton").GetComponent<Button>();
+        isSettingsOpen = false;
+        UIButton = MainMenuUI.transform.Find("Bottom").Find("RunButton").GetComponent<Button>();
+        settingsAnimator = OptionsUI.GetComponent<Animator>();
     }
 
     public void StartRace()
@@ -59,7 +63,9 @@ public class GameManager : MonoBehaviour
                 mover.canMove = true;
             }
         }
-        UIButton.gameObject.SetActive(false);
+
+        UIButton.interactable = false;
+        UIButton.gameObject.GetComponent<Animator>().Play("RunButtonAnim");
 
         stateController.animHandler.CrossFade("Blend Tree", 0.05f, 0);
 
@@ -71,5 +77,23 @@ public class GameManager : MonoBehaviour
         stateController.ChangeState(stateController.runningState);
         MainMenuUI.transform.Find("Top").GetComponent<Animator>().Play("FadeOutTopAnim");
         MainMenuUI.transform.Find("Bottom").GetComponent<Animator>().Play("FadeOutBottomAnim");
+    }
+
+    public void HandleSettings()
+    {
+        if (!isSettingsOpen)
+        {
+            isSettingsOpen = true;
+            settingsAnimator.SetFloat("Speed", 1);
+            settingsAnimator.Play("OpenCloseSettingsAnim", 0, 0f);
+        }
+        else
+        {
+            isSettingsOpen = false;
+            settingsAnimator.SetFloat("Speed", -1);
+            settingsAnimator.Play("OpenCloseSettingsAnim", 0, 1f);
+        }
+        
+        Debug.Log(isSettingsOpen);
     }
 }
