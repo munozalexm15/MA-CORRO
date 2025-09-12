@@ -26,7 +26,7 @@ MonoBehaviour:
   m_SupportsHDR: 0
   m_HDRColorBufferPrecision: 0
   m_MSAA: 1
-  m_RenderScale: 0.7
+  m_RenderScale: 0.67
   m_UpscalingFilter: 0
   m_FsrOverrideSharpness: 0
   m_FsrSharpness: 0.92
@@ -45,8 +45,8 @@ MonoBehaviour:
   m_AdditionalLightsShadowResolutionTierHigh: 1024
   m_ReflectionProbeBlending: 0
   m_ReflectionProbeBoxProjection: 0
-  m_ShadowDistance: 45
-  m_ShadowCascadeCount: 1
+  m_ShadowDistance: 50
+  m_ShadowCascadeCount: 2
   m_Cascade2Split: 0.37
   m_Cascade3Split: {x: 0.197, y: 0.48899996}
   m_Cascade4Split: {x: 0.289, y: 0.42499998, z: 0.534}

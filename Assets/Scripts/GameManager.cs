@@ -14,14 +14,9 @@ public class GameManager : MonoBehaviour
     public GameObject OptionsUI;
     private Button UIButton;
 
-    private bool isSettingsOpen;
-    private Animator settingsAnimator;
-
 
     [Header("Positions")]
-    public Transform targetPos;
     public Transform currentPos;
-    public Transform PlayerPos;
 
     public Camera cam;
 
@@ -36,9 +31,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isSettingsOpen = false;
         UIButton = MainMenuUI.transform.Find("Bottom").Find("RunButton").GetComponent<Button>();
-        settingsAnimator = OptionsUI.GetComponent<Animator>();
     }
 
     public void StartRace()
@@ -65,8 +58,6 @@ public class GameManager : MonoBehaviour
         }
 
         UIButton.interactable = false;
-        UIButton.gameObject.GetComponent<Animator>().Play("RunButtonAnim");
-
         stateController.animHandler.CrossFade("Blend Tree", 0.05f, 0);
 
         //isLerping = true;
@@ -79,21 +70,5 @@ public class GameManager : MonoBehaviour
         MainMenuUI.transform.Find("Bottom").GetComponent<Animator>().Play("FadeOutBottomAnim");
     }
 
-    public void HandleSettings()
-    {
-        if (!isSettingsOpen)
-        {
-            isSettingsOpen = true;
-            settingsAnimator.SetFloat("Speed", 1);
-            settingsAnimator.Play("OpenCloseSettingsAnim", 0, 0f);
-        }
-        else
-        {
-            isSettingsOpen = false;
-            settingsAnimator.SetFloat("Speed", -1);
-            settingsAnimator.Play("OpenCloseSettingsAnim", 0, 1f);
-        }
-        
-        Debug.Log(isSettingsOpen);
-    }
+    
 }
