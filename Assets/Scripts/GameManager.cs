@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
         startRot = currentPos.rotation;
         cam.GetComponent<CameraOrbit>().BeginOrbit();
         stateController.ChangeState(stateController.runningState);
-        MainMenuUI.transform.Find("Top").GetComponent<Animator>().Play("FadeOutTopAnim");
+        MainMenuUI.transform.GetComponent<Animator>().Play("FadeOutTopAnim");
         MainMenuUI.transform.Find("Bottom").GetComponent<Animator>().Play("FadeOutBottomAnim");
     }
 

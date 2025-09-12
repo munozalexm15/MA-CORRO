@@ -58,7 +58,7 @@ public class ShadowQualitySliderUI : MonoBehaviour
         {
             case 0: qualityLabel.text = "Low"; break;
             case 1: qualityLabel.text = "Medium"; break;
-            case 2: qualityLabel.text = "Very High"; break;
+            case 2: qualityLabel.text = "High"; break;
         }
     }
 }
